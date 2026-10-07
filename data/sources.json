@@ -1,0 +1,15 @@
+{
+ "own": ["marola-dev", "h0ffmann"],
+ "watch": [
+  "anthropics/skills",
+  "Leonxlnx/taste-skill",
+  "emilkowalski/skill",
+  "forrestchang/andrej-karpathy-skills",
+  "mapbox/mapbox-agent-skills",
+  "blader/humanizer",
+  "DietrichGebert/ponytail",
+  "fabricioctelles/skills",
+  "zircote/github-social",
+  "Cocoon-AI/architecture-diagram-generator"
+ ]
+}
