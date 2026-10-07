@@ -23,6 +23,22 @@ Where they live: marola-site (18), the marola-devkit plugin (13 + 2 agents), the
 marola-corpus (1), marola-app (1 agent), ww3-gpu (7 + 1 agent). marola-ml and marola-oods have
 none.
 
+## By tag
+
+Every skill carries one tag (two for `corpus-doc`); the [catalogue](docs/4-reference.md#tags)
+defines them.
+
+| Tag | Skills and agents |
+|---|---|
+| **FE** (17) | `site-frontend`, `citizen-science-site`, `ptbr-humanizer`, `frontend-design`, `webapp-testing`, `design-taste-frontend`, `emil-design-eng`, `review-animations`, `break-ui`, the eight `mapbox-*` |
+| **backend** (5 names, 8 copies) | `ponytail`, `ponytail-review`, `ponytail-audit` (devkit and ww3-gpu), `karpathy-guidelines`, agent `jar-verifier` |
+| **DE** (2) | `corpus-doc`, `voice-note-ingest` |
+| **research** (8 names, 10 copies) | `eli5` (umbrella and ww3-gpu, different skills), `humanizer` (devkit and ww3-gpu), `humanizar`, `citation-cff`, `zenodo-release`, `release`, `corpus-doc`, agent `revisor-proposta` |
+| **workflow** (11) | `mip`, `mip-tasks`, `mip-solve-perpetual`, `triage`, `sharingan`, `skill-copy`, `obsidian-vault`, `voice-to-feature`, `architecture-diagram`, agents `mip-reviewer`, `mip-claims-auditor` |
+
+**workflow** is a fifth tag: these skills run the team's process (MIPs, issues, stacked PRs,
+porting skills) and fit none of the other four.
+
 ## Docs
 
 - [Catalogue](docs/4-reference.md): every skill and agent, with its source, upstream pin and test
