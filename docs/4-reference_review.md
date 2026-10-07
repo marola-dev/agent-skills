@@ -8,6 +8,8 @@ repo's `main` on the audit date.
 
 ### R1. `mip-solve-perpetual` implements Draft MIPs unattended
 
+Tracked in [marola-devkit#36](https://github.com/marola-dev/marola-devkit/issues/36).
+
 marola-devkit `plugins/marola-devkit/skills/mip-solve-perpetual/SKILL.md`
 
 - With no argument it auto-picks a MIP whose status is **Draft** (line 27) and implements it
@@ -24,6 +26,8 @@ marola-devkit `plugins/marola-devkit/skills/mip-solve-perpetual/SKILL.md`
 narrow `Bash(git *)` to the subcommands it uses; drop the `usage-lib.js` pointer.
 
 ### R2. `voice-to-feature` is allowed to file and close issues
+
+Tracked in [marola-devkit#37](https://github.com/marola-dev/marola-devkit/issues/37).
 
 marola-devkit `plugins/marola-devkit/skills/voice-to-feature/SKILL.md:5`
 
@@ -47,6 +51,8 @@ copy.
 
 ### R4. Paths to a renamed folder
 
+Tracked in [marola-devkit#38](https://github.com/marola-dev/marola-devkit/issues/38).
+
 `docs/3-Working-on-the-repo/` became `docs/3-Ways-of-working/` in the umbrella (the redirect is in
 `mkdocs/mkdocs.yml`), but these still cite the old path:
 
@@ -61,6 +67,8 @@ copy.
 
 ### R5. `humanizer` is a version behind upstream
 
+Tracked in [marola-devkit#39](https://github.com/marola-dev/marola-devkit/issues/39).
+
 Both copies (devkit and ww3-gpu) are blader/humanizer v3.0.0; upstream is v3.1.0 (225a6f3), which
 adds a "wrong reader" tell, sharper closer and hyphenation rules, and fixes a section reference
 (the dash rule is §8, the copy says §6).
@@ -68,6 +76,8 @@ adds a "wrong reader" tell, sharper closer and hyphenation rules, and fixes a se
 **Fix:** re-vendor v3.1.0 in the devkit; in ww3-gpu, re-vendor and keep the audience paragraph.
 
 ### R6. `ponytail-review` and `ponytail-audit` are behind upstream
+
+Tracked in [marola-devkit#40](https://github.com/marola-dev/marola-devkit/issues/40).
 
 Upstream (DietrichGebert/ponytail@552acd5) now numbers findings so the user can say "fix 2 and
 5", adds a `reuse:` tag for a helper that already exists in the repo, and makes `ponytail-audit`
@@ -78,6 +88,8 @@ grep the tree before it recommends a delete. Both the devkit's and ww3-gpu's cop
 
 ### R7. `sharingan` and `skill-copy` pin a model and the highest effort
 
+Tracked in [marola-devkit#41](https://github.com/marola-dev/marola-devkit/issues/41).
+
 Both set `model: claude-opus-5-5` and `effort: xhigh`. Every port runs at the most expensive
 setting, and the pin breaks quietly when that model id is retired. `sharingan`'s 15 evals have
 never been run, so there is no measurement that the pin is needed.
@@ -86,6 +98,8 @@ never been run, so there is no measurement that the pin is needed.
 there.
 
 ### R8. Evals that ship but have never been run here
+
+Tracked in [marola#700](https://github.com/marola-dev/marola/issues/700).
 
 `architecture-diagram` (2 output, 12 trigger), `sharingan` (3, 12), `obsidian-vault` (4 of its 5
 output cases), `citation-cff` (7) and the eight `mapbox-*` skills (3 each). The only record for
@@ -99,6 +113,8 @@ are the lowest priority.
 
 ### R9. `design-taste-frontend` pulls against the site's rules
 
+Tracked in [marola-site#89](https://github.com/marola-dev/marola-site/issues/89).
+
 1,206 lines loaded whenever it triggers, and it recommends `npm install` of design systems
 (lines 991–1025) and shadcn, while marola-site is plain JavaScript with no build step.
 `site-frontend` already says the repo's rules win.
@@ -107,6 +123,8 @@ are the lowest priority.
 
 ### R10. Two mapbox skills that do not fit marola-site
 
+Tracked in [marola-site#90](https://github.com/marola-dev/marola-site/issues/90).
+
 `mapbox-maplibre-migration` covers moving off MapLibre, which marola never used.
 `mapbox-web-integration-patterns` (lines 23–46) installs Mapbox from npm or a CDN `<script>`, while
 the site vendors Mapbox GL JS's CSP build under `script-src 'self'`.
@@ -114,6 +132,8 @@ the site vendors Mapbox GL JS's CSP build under `script-src 'self'`.
 **Fix:** drop `mapbox-maplibre-migration`; keep the other, since `site-frontend` arbitrates.
 
 ### R11. `karpathy-guidelines` has no licence file
+
+Tracked in [marola-site#91](https://github.com/marola-dev/marola-site/issues/91).
 
 Its front matter says `license: MIT`, but neither the vendored folder nor the upstream repo
 (forrestchang/andrej-karpathy-skills@2c60614) has a `LICENSE`. Every other vendored skill carries
@@ -130,6 +150,8 @@ unrelated (105 and 76 lines, with 111 diff lines between them).
 **Fix:** none needed in the repos; this catalogue lists them separately.
 
 ### R13. `site-frontend`'s baseline run is claimed but not recorded
+
+Tracked in [marola-site#92](https://github.com/marola-dev/marola-site/issues/92).
 
 The umbrella's Agent skills page says `site-frontend` was written with superpowers'
 `writing-skills`, with a baseline run without it. No commit records that run, so it is listed as

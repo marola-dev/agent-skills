@@ -52,23 +52,61 @@ defines them.
 **workflow** is a fifth tag: these skills run the team's process (MIPs, issues, stacked PRs,
 porting skills) and fit none of the other four.
 
+## Top 20 skill repositories
+
+Picked for the work here (FE, backend, DE and research, as in the [catalogue](docs/4-reference.md#tags)),
+ranked by stars gained in the last 30 days. Listed, not reviewed: run one through the audit before
+vendoring it. GitHub publishes clone counts only to a repo's own maintainers, so stars and forks are
+the signal. The table is rewritten by the daily refresh from `data/curated.json`; until it has 30 days
+of history, "Gained" counts from its first reading.
+
+<!-- top-repos:start -->
+| # | Repository | Stars | Forks | Gained | Tag | Why it is here |
+|---|---|---|---|---|---|---|
+| 1 | [tt-a1i/archify](https://github.com/tt-a1i/archify) | 78.7k |  | +38,190 in Sep | FE | Architecture and workflow diagrams as self-contained HTML; the same job as the umbrella's `architecture-diagram` |
+| 2 | [nexu-io/open-design](https://github.com/nexu-io/open-design) | 99.2k |  |  | FE | Design-system skills for agent-built UI; a candidate next to marola-site's `design-taste-frontend` |
+| 3 | [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) | 43.1k |  |  | FE | Diagram design rules for docs and READMEs (MIP-0068's diagrams) |
+| 4 | [Agents365-ai/drawio-skill](https://github.com/Agents365-ai/drawio-skill) | 5.8k* |  |  | FE | draw.io diagrams from text, for proposal and docs figures |
+| 5 | [mattpocock/skills](https://github.com/mattpocock/skills) | 278.2k |  | +1.1k on Oct 6 | backend | An engineer's day-to-day skills; the most starred skills repo this month |
+| 6 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 102.1k |  | +538 on Oct 6 | backend | Production engineering skills: testing, performance, review |
+| 7 | [affaan-m/ECC](https://github.com/affaan-m/ECC) | 274.3k |  | +26,563 in Sep | backend | A whole agent harness (skills, memory, security); compare with marola-devkit before borrowing |
+| 8 | [alibaba/open-code-review](https://github.com/alibaba/open-code-review) | 43.4k |  |  | backend | Code review skills, next to `ponytail-review` and Claude Code Review |
+| 9 | [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | 25.4k |  | +559 on Oct 6 | backend | Multi-phase security audit with machine-readable findings, for the app and the site |
+| 10 | [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) | 18.8k |  | +3,388 in Sep | research | Scans a skill for risks before it is installed; automates part of this repo's audit |
+| 11 | [mksglu/context-mode](https://github.com/mksglu/context-mode) | 24.5k |  | +4,165 in Sep | backend | Context-window savings for agents, the token budget this repo optimises for |
+| 12 | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | 124.7k |  |  | backend | Codebase knowledge graph; marola adopts it through MIP-0076 (docs/4-reference_graphify.md) |
+| 13 | [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) | 87.3k* |  |  | backend | Memory across sessions; overlaps the devkit's `obsidian-vault` handoffs |
+| 14 | [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | 47.9k |  |  | research | 177 science skills: scientific writing, peer review, marine carbonate chemistry, CFD, GPU, Polars and Dask |
+| 15 | [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs) | 10.7k* |  |  | research | ML research and training skills, for marola-ml's fine-tune and benchmark |
+| 16 | [teng-lin/notebooklm-py](https://github.com/teng-lin/notebooklm-py) | 17.8k* |  |  | research | NotebookLM from an agent, for literature and proposal reading |
+| 17 | [yusufkaraaslan/Skill_Seekers](https://github.com/yusufkaraaslan/Skill_Seekers) | 14.5k* |  |  | DE | Turns documentation sites, repos and PDFs into skills, e.g. the WAVEWATCH III manual for ww3-gpu |
+| 18 | [tigerless-labs/autoharness](https://github.com/tigerless-labs/autoharness) | 9.0k |  | +1.0k on Oct 6 | DE | Distils skills from past sessions and prunes unused ones |
+| 19 | [max-sixty/worktrunk](https://github.com/max-sixty/worktrunk) | 8.6k |  | +1,884 in Sep | backend | Git worktrees for parallel agents, the devkit's stacked-PR worktrees |
+| 20 | [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) | 35.1k |  |  | research | A curated directory of 1,000+ skills, to search before writing one |
+
+Seed values from 2026-10-07, before the first refresh: stars from GitHub's pages, "in Sep" from
+[GitHub Rank's monthly trending](https://wangchujiang.com/github-rank/trending-monthly.html) (2026-10-01),
+"on Oct 6" from [gittrend.io](https://gittrend.io/trending/ai-skills); * marks a count from a cached
+topic page, likely low.
+<!-- top-repos:end -->
+
 ## Review findings
 
-Highest first; each one has its evidence and a proposed fix.
+Highest first; each one has its evidence, a proposed fix and the issue tracking it in the repo that owns the fix.
 
-- [R1. `mip-solve-perpetual` implements Draft MIPs unattended](docs/4-reference_review.md#r1-mip-solve-perpetual-implements-draft-mips-unattended)
-- [R2. `voice-to-feature` is allowed to file and close issues](docs/4-reference_review.md#r2-voice-to-feature-is-allowed-to-file-and-close-issues)
-- [R3. Stale copies of the MIP skills on the claude.ai account](docs/4-reference_review.md#r3-stale-copies-of-the-mip-skills-on-the-claudeai-account)
-- [R4. Paths to a renamed folder](docs/4-reference_review.md#r4-paths-to-a-renamed-folder)
-- [R5. `humanizer` is a version behind upstream](docs/4-reference_review.md#r5-humanizer-is-a-version-behind-upstream)
-- [R6. `ponytail-review` and `ponytail-audit` are behind upstream](docs/4-reference_review.md#r6-ponytail-review-and-ponytail-audit-are-behind-upstream)
-- [R7. `sharingan` and `skill-copy` pin a model and the highest effort](docs/4-reference_review.md#r7-sharingan-and-skill-copy-pin-a-model-and-the-highest-effort)
-- [R8. Evals that ship but have never been run here](docs/4-reference_review.md#r8-evals-that-ship-but-have-never-been-run-here)
-- [R9. `design-taste-frontend` pulls against the site's rules](docs/4-reference_review.md#r9-design-taste-frontend-pulls-against-the-sites-rules)
-- [R10. Two mapbox skills that do not fit marola-site](docs/4-reference_review.md#r10-two-mapbox-skills-that-do-not-fit-marola-site)
-- [R11. `karpathy-guidelines` has no licence file](docs/4-reference_review.md#r11-karpathy-guidelines-has-no-licence-file)
-- [R12. Two different skills named `eli5`](docs/4-reference_review.md#r12-two-different-skills-named-eli5)
-- [R13. `site-frontend`'s baseline run is claimed but not recorded](docs/4-reference_review.md#r13-site-frontends-baseline-run-is-claimed-but-not-recorded)
+- [R1. `mip-solve-perpetual` implements Draft MIPs unattended](docs/4-reference_review.md#r1-mip-solve-perpetual-implements-draft-mips-unattended) · issue [marola-devkit#36](https://github.com/marola-dev/marola-devkit/issues/36)
+- [R2. `voice-to-feature` is allowed to file and close issues](docs/4-reference_review.md#r2-voice-to-feature-is-allowed-to-file-and-close-issues) · issue [marola-devkit#37](https://github.com/marola-dev/marola-devkit/issues/37)
+- [R3. Stale copies of the MIP skills on the claude.ai account](docs/4-reference_review.md#r3-stale-copies-of-the-mip-skills-on-the-claudeai-account) · your claude.ai account, no repo issue
+- [R4. Paths to a renamed folder](docs/4-reference_review.md#r4-paths-to-a-renamed-folder) · issue [marola-devkit#38](https://github.com/marola-dev/marola-devkit/issues/38)
+- [R5. `humanizer` is a version behind upstream](docs/4-reference_review.md#r5-humanizer-is-a-version-behind-upstream) · issue [marola-devkit#39](https://github.com/marola-dev/marola-devkit/issues/39)
+- [R6. `ponytail-review` and `ponytail-audit` are behind upstream](docs/4-reference_review.md#r6-ponytail-review-and-ponytail-audit-are-behind-upstream) · issue [marola-devkit#40](https://github.com/marola-dev/marola-devkit/issues/40)
+- [R7. `sharingan` and `skill-copy` pin a model and the highest effort](docs/4-reference_review.md#r7-sharingan-and-skill-copy-pin-a-model-and-the-highest-effort) · issue [marola-devkit#41](https://github.com/marola-dev/marola-devkit/issues/41)
+- [R8. Evals that ship but have never been run here](docs/4-reference_review.md#r8-evals-that-ship-but-have-never-been-run-here) · issue [marola#700](https://github.com/marola-dev/marola/issues/700)
+- [R9. `design-taste-frontend` pulls against the site's rules](docs/4-reference_review.md#r9-design-taste-frontend-pulls-against-the-sites-rules) · issue [marola-site#89](https://github.com/marola-dev/marola-site/issues/89)
+- [R10. Two mapbox skills that do not fit marola-site](docs/4-reference_review.md#r10-two-mapbox-skills-that-do-not-fit-marola-site) · issue [marola-site#90](https://github.com/marola-dev/marola-site/issues/90)
+- [R11. `karpathy-guidelines` has no licence file](docs/4-reference_review.md#r11-karpathy-guidelines-has-no-licence-file) · issue [marola-site#91](https://github.com/marola-dev/marola-site/issues/91)
+- [R12. Two different skills named `eli5`](docs/4-reference_review.md#r12-two-different-skills-named-eli5) · no fix needed
+- [R13. `site-frontend`'s baseline run is claimed but not recorded](docs/4-reference_review.md#r13-site-frontends-baseline-run-is-claimed-but-not-recorded) · issue [marola-site#92](https://github.com/marola-dev/marola-site/issues/92)
 
 ## Docs
 

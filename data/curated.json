@@ -1,0 +1,22 @@
+[
+ {"repo": "tt-a1i/archify", "tag": "FE", "why": "Architecture and workflow diagrams as self-contained HTML; the same job as the umbrella's `architecture-diagram`"},
+ {"repo": "nexu-io/open-design", "tag": "FE", "why": "Design-system skills for agent-built UI; a candidate next to marola-site's `design-taste-frontend`"},
+ {"repo": "cathrynlavery/diagram-design", "tag": "FE", "why": "Diagram design rules for docs and READMEs (MIP-0068's diagrams)"},
+ {"repo": "Agents365-ai/drawio-skill", "tag": "FE", "why": "draw.io diagrams from text, for proposal and docs figures"},
+ {"repo": "mattpocock/skills", "tag": "backend", "why": "An engineer's day-to-day skills; the most starred skills repo this month"},
+ {"repo": "addyosmani/agent-skills", "tag": "backend", "why": "Production engineering skills: testing, performance, review"},
+ {"repo": "affaan-m/ECC", "tag": "backend", "why": "A whole agent harness (skills, memory, security); compare with marola-devkit before borrowing"},
+ {"repo": "alibaba/open-code-review", "tag": "backend", "why": "Code review skills, next to `ponytail-review` and Claude Code Review"},
+ {"repo": "cloudflare/security-audit-skill", "tag": "backend", "why": "Multi-phase security audit with machine-readable findings, for the app and the site"},
+ {"repo": "NVIDIA/SkillSpector", "tag": "research", "why": "Scans a skill for risks before it is installed; automates part of this repo's audit"},
+ {"repo": "mksglu/context-mode", "tag": "backend", "why": "Context-window savings for agents, the token budget this repo optimises for"},
+ {"repo": "Graphify-Labs/graphify", "tag": "backend", "why": "Codebase knowledge graph; marola adopts it through MIP-0076 (docs/4-reference_graphify.md)"},
+ {"repo": "thedotmack/claude-mem", "tag": "backend", "why": "Memory across sessions; overlaps the devkit's `obsidian-vault` handoffs"},
+ {"repo": "K-Dense-AI/scientific-agent-skills", "tag": "research", "why": "177 science skills: scientific writing, peer review, marine carbonate chemistry, CFD, GPU, Polars and Dask"},
+ {"repo": "Orchestra-Research/AI-Research-SKILLs", "tag": "research", "why": "ML research and training skills, for marola-ml's fine-tune and benchmark"},
+ {"repo": "teng-lin/notebooklm-py", "tag": "research", "why": "NotebookLM from an agent, for literature and proposal reading"},
+ {"repo": "yusufkaraaslan/Skill_Seekers", "tag": "DE", "why": "Turns documentation sites, repos and PDFs into skills, e.g. the WAVEWATCH III manual for ww3-gpu"},
+ {"repo": "tigerless-labs/autoharness", "tag": "DE", "why": "Distils skills from past sessions and prunes unused ones"},
+ {"repo": "max-sixty/worktrunk", "tag": "backend", "why": "Git worktrees for parallel agents, the devkit's stacked-PR worktrees"},
+ {"repo": "VoltAgent/awesome-agent-skills", "tag": "research", "why": "A curated directory of 1,000+ skills, to search before writing one"}
+]
