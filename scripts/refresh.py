@@ -261,9 +261,8 @@ def main(argv=None):
     queue = sum(
         1 for s in index["skills"].values() if s.get("review") in ("new", "changed since review")
     )
-    print(
-        f"{len(index['skills'])} skills and agents, {queue} waiting for review, {gh.calls} API calls"
-    )
+    total = len(index["skills"])
+    print(f"{total} skills and agents, {queue} waiting for review, {gh.calls} API calls")
     return 0
 
 
