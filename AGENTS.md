@@ -27,7 +27,8 @@ has it.
 - `scripts/refresh.py`, stdlib only: rebuilds `data/index.json` and `docs/4-reference_index.md`
   (generated, never edited by hand). `--self-test` runs in `ci.yml`; `refresh.yml` runs it daily.
 - `data/sources.json` (owners and watched repos), `data/tags.json` (FE, backend, DE, research,
-  workflow), `data/reviewed.json` (the blob each skill was last reviewed at).
+  workflow), `data/reviewed.json` (the blob each skill was last reviewed at), `data/curated.json` (the README's
+  top 20, chosen by hand) and `data/stars.json` (their star history, generated).
 
 **Reviewing the queue.** Read only the skills under "Waiting for review" in the generated index,
 update the audit pages, then `python3 scripts/refresh.py --reviewed <repo:path>...` and tag new

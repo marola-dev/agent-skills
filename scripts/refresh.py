@@ -14,7 +14,7 @@ import sys
 import urllib.error
 import urllib.request
 from base64 import b64decode, b64encode
-from datetime import date
+from datetime import date, timedelta
 from fnmatch import fnmatch
 from pathlib import Path
 
@@ -228,6 +228,61 @@ def render(index):
     return "\n".join(out) + "\n"
 
 
+def stars(gh, curated, history, today):
+    """Append today's [stars, forks] of each curated repo to history, keyed repo then date."""
+    for entry in curated:
+        full = entry["repo"]
+        r = gh.get(f"{API}/repos/{full}", f"repo:{full}")
+        past = history.setdefault(full, {})
+        if r:
+            past[today] = [r["stargazers_count"], r["forks_count"]]
+        elif r is None and past:  # 304: unchanged since the last reading
+            past[today] = past[max(past)]
+    return history
+
+
+def gain(past, today, days=30):
+    """Stars gained over the last `days`, or since the first reading when history is shorter."""
+    if not past or today not in past:
+        return None, None
+    cutoff = str(date.fromisoformat(today) - timedelta(days=days))
+    older = [d for d in past if d <= cutoff]
+    base = max(older) if older else min(past)
+    return past[today][0] - past[base][0], base
+
+
+def render_curated(curated, history, today):
+    rows = []
+    for e in curated:
+        past = history.get(e["repo"], {})
+        s, base = gain(past, today)
+        now = past.get(today, [None, None])
+        rows.append((s if s is not None else -1, e, now, s, base))
+    rows.sort(key=lambda r: (-r[0], -(r[2][0] or 0)))
+    out = [
+        "| # | Repository | Stars | Forks | Gained | Tag | Why it is here |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for i, (_, e, now, s, base) in enumerate(rows, 1):
+        if s is None or base == today:
+            gained = ""
+        elif date.fromisoformat(today) - date.fromisoformat(base) >= timedelta(days=30):
+            gained = f"+{s:,}"
+        else:
+            gained = f"+{s:,} since {base}"
+        st = "" if now[0] is None else f"{now[0]:,}"
+        fk = "" if now[1] is None else f"{now[1]:,}"
+        repo = f"[{e['repo']}](https://github.com/{e['repo']})"
+        out.append(f"| {i} | {repo} | {st} | {fk} | {gained} | {e['tag']} | {e['why']} |")
+    return "\n".join(out)
+
+
+def splice(text, block, name):
+    start, end = f"<!-- {name}:start -->", f"<!-- {name}:end -->"
+    head, rest = text.split(start, 1)
+    return f"{head}{start}\n{block}\n{end}{rest.split(end, 1)[1]}"
+
+
 def load(path, default):
     return json.loads(path.read_text()) if path.exists() else default
 
@@ -261,6 +316,14 @@ def main(argv=None):
     queue = sum(
         1 for s in index["skills"].values() if s.get("review") in ("new", "changed since review")
     )
+    curated = load(data / "curated.json", [])
+    if curated:
+        today = str(date.today())
+        history = stars(gh, curated, load(data / "stars.json", {}), today)
+        (data / "stars.json").write_text(json.dumps(history, indent=1, sort_keys=True) + "\n")
+        readme = ROOT / "README.md"
+        block = render_curated(curated, history, today)
+        readme.write_text(splice(readme.read_text(), block, "top-repos"))
     total = len(index["skills"])
     print(f"{total} skills and agents, {queue} waiting for review, {gh.calls} API calls")
     return 0
@@ -349,6 +412,19 @@ def self_test():
     page = render(annotate(again, {}, {}))
     assert "## Waiting for review" in page and "`rev`" in page
     assert front_matter("no front matter", "a/b/SKILL.md") == ("b", "")
+    h = {"a/b": {"2026-09-01": [100, 1], "2026-09-10": [150, 2], "2026-10-07": [400, 9]}}
+    assert gain(h["a/b"], "2026-10-07") == (300, "2026-09-01"), gain(h["a/b"], "2026-10-07")
+    assert gain({"2026-10-06": [5, 0], "2026-10-07": [8, 0]}, "2026-10-07") == (3, "2026-10-06")
+    gh3 = Fake({"/repos/a/b": {"stargazers_count": 7, "forks_count": 1}, "/repos/c/d": None})
+    hist = stars(
+        gh3, [{"repo": "a/b"}, {"repo": "c/d"}], {"c/d": {"2026-10-06": [3, 0]}}, "2026-10-07"
+    )
+    assert hist["a/b"]["2026-10-07"] == [7, 1] and hist["c/d"]["2026-10-07"] == [3, 0], hist
+    cur = [{"repo": "a/b", "tag": "FE", "why": "x"}, {"repo": "c/d", "tag": "DE", "why": "y"}]
+    table = render_curated(cur, hist, "2026-10-07")
+    assert table.index("a/b") < table.index("c/d") and "+0 since 2026-10-06" in table, table
+    doc = splice("a\n<!-- t:start -->\nold\n<!-- t:end -->\nb", "new", "t")
+    assert doc == "a\n<!-- t:start -->\nnew\n<!-- t:end -->\nb", doc
     print("refresh.py self-test: ok")
     return 0
 

@@ -102,6 +102,11 @@ GH_TOKEN=… python3 scripts/refresh.py    # live; any token that reads public r
 python3 scripts/refresh.py --reviewed marola-dev/marola-site:.claude/skills/break-ui/SKILL.md
 ```
 
+The same run reads each repository in `data/curated.json` (one call each, a 304 when unchanged),
+appends its stars and forks to `data/stars.json`, and rewrites the README's top-20 table between
+the `top-repos` markers, ranked by stars gained over 30 days. Picking the 20 stays a human edit to
+`data/curated.json`; the numbers are the refresh's.
+
 `refresh.yml` reads with `MAROLA_CROSS_REPO_PAT` when this repo has access to that org secret, else
 the workflow's own token. Only the PAT makes the rolling PR start CI. Private repos are not listed.
 

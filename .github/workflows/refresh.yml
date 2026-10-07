@@ -37,7 +37,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -C "$BRANCH"
-          git add data docs
+          git add data docs README.md
           git commit -qm "chore: refresh the skills index" \
             -m "Tested: scripts/refresh.py" -m "Cost: n/a (automation)" \
             -m "Co-Authored-By: Claude <noreply@anthropic.com>"
