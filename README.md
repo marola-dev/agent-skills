@@ -52,6 +52,14 @@ defines them.
 **workflow** is a fifth tag: these skills run the team's process (MIPs, issues, stacked PRs,
 porting skills) and fit none of the other four.
 
+## Featured: Graphify
+
+[Graphify](https://github.com/Graphify-Labs/graphify) (124.7k stars) turns a codebase into a knowledge
+graph an agent queries instead of reading trees. marola adopts it through
+[MIP-0076](https://docs.marola.dev/6-MIPs/MIP-0076-agent-routing-tooling/), offline and keyless behind
+the devkit's `just graph`, never by installing the skill. [How, and where the work
+stands](docs/4-reference_graphify.md).
+
 ## Top 20 skill repositories
 
 Picked for the work here (FE, backend, DE and research, as in the [catalogue](docs/4-reference.md#tags)),
@@ -114,6 +122,7 @@ Highest first; each one has its evidence, a proposed fix and the issue tracking 
   status.
 - [Needs review](docs/4-reference_review.md): the flagged ones, each with the evidence and a
   proposed fix.
+- [Graphify](docs/4-reference_graphify.md): how marola adopts it, the rules and the open tasks.
 - [Development](docs/3-development.md): how each status was established, with the commands to
   reproduce it, and how to refresh the catalogue.
 

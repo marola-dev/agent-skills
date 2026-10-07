@@ -1,5 +1,8 @@
 {
- "own": ["marola-dev", "h0ffmann"],
+ "own": [
+  "marola-dev",
+  "h0ffmann"
+ ],
  "watch": [
   "anthropics/skills",
   "Leonxlnx/taste-skill",
@@ -10,6 +13,7 @@
   "DietrichGebert/ponytail",
   "fabricioctelles/skills",
   "zircote/github-social",
-  "Cocoon-AI/architecture-diagram-generator"
+  "Cocoon-AI/architecture-diagram-generator",
+  "Graphify-Labs/graphify"
  ]
 }
