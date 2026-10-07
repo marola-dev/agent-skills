@@ -4,8 +4,21 @@ A catalogue of every Claude Code skill and subagent used across marola-dev and
 [h0ffmann/ww3-gpu](https://github.com/h0ffmann/ww3-gpu): where each one lives, where it came from,
 what has actually been tested, and which ones need a human to look at them.
 
-**Status:** documentation only, reviewed by hand on 2026-10-07. Nothing here is loaded by Claude
-Code: skills keep living in the repo that uses them, and this repo describes them.
+**Status:** hand-audited on 2026-10-07, refreshed daily by a workflow. Nothing here is loaded by
+Claude Code: skills keep living in the repo that uses them, and this repo describes them.
+
+## Automation
+
+`refresh.yml` runs every day at 06:17 UTC (or by hand from the Actions tab). It finds every
+`SKILL.md` and subagent in all public repos of the owners in [`data/sources.json`](data/sources.json),
+and in the outside repos or users it watches. It writes `data/index.json` and
+`docs/4-reference_index.md` (both appear with the first run), and opens one rolling PR when
+anything changed.
+
+It spends no model tokens: discovery is GitHub API calls only, and repos not pushed since the last
+run cost a 304. Only the PR's "Waiting for review" list, the skills that are new or changed since
+their last review, ever needs an agent to read them. To watch someone else's skills, add
+`"owner"` (all their public repos) or `"owner/repo"` to `watch` in `data/sources.json`.
 
 ## At a glance
 
@@ -38,6 +51,24 @@ defines them.
 
 **workflow** is a fifth tag: these skills run the team's process (MIPs, issues, stacked PRs,
 porting skills) and fit none of the other four.
+
+## Review findings
+
+Highest first; each one has its evidence and a proposed fix.
+
+- [R1. `mip-solve-perpetual` implements Draft MIPs unattended](docs/4-reference_review.md#r1-mip-solve-perpetual-implements-draft-mips-unattended)
+- [R2. `voice-to-feature` is allowed to file and close issues](docs/4-reference_review.md#r2-voice-to-feature-is-allowed-to-file-and-close-issues)
+- [R3. Stale copies of the MIP skills on the claude.ai account](docs/4-reference_review.md#r3-stale-copies-of-the-mip-skills-on-the-claudeai-account)
+- [R4. Paths to a renamed folder](docs/4-reference_review.md#r4-paths-to-a-renamed-folder)
+- [R5. `humanizer` is a version behind upstream](docs/4-reference_review.md#r5-humanizer-is-a-version-behind-upstream)
+- [R6. `ponytail-review` and `ponytail-audit` are behind upstream](docs/4-reference_review.md#r6-ponytail-review-and-ponytail-audit-are-behind-upstream)
+- [R7. `sharingan` and `skill-copy` pin a model and the highest effort](docs/4-reference_review.md#r7-sharingan-and-skill-copy-pin-a-model-and-the-highest-effort)
+- [R8. Evals that ship but have never been run here](docs/4-reference_review.md#r8-evals-that-ship-but-have-never-been-run-here)
+- [R9. `design-taste-frontend` pulls against the site's rules](docs/4-reference_review.md#r9-design-taste-frontend-pulls-against-the-sites-rules)
+- [R10. Two mapbox skills that do not fit marola-site](docs/4-reference_review.md#r10-two-mapbox-skills-that-do-not-fit-marola-site)
+- [R11. `karpathy-guidelines` has no licence file](docs/4-reference_review.md#r11-karpathy-guidelines-has-no-licence-file)
+- [R12. Two different skills named `eli5`](docs/4-reference_review.md#r12-two-different-skills-named-eli5)
+- [R13. `site-frontend`'s baseline run is claimed but not recorded](docs/4-reference_review.md#r13-site-frontends-baseline-run-is-claimed-but-not-recorded)
 
 ## Docs
 

@@ -19,9 +19,19 @@ Non-negotiable in every marola repo; a repo may make these stricter, never loose
 
 ## What this repo is
 
-Documentation of the Claude Code skills and subagents in the marola-dev repos and in
-h0ffmann/ww3-gpu: `README.md` and `docs/`. It holds no copy of any skill. A skill is fixed in the
-repo that has it, and the row here is updated in the same week.
+Documentation of the Claude Code skills and subagents in the marola-dev repos, h0ffmann's repos
+and the upstreams they came from. It holds no copy of any skill; a skill is fixed in the repo that
+has it.
+
+- `README.md`, `docs/4-reference.md` (the hand-written audit) and `docs/4-reference_review.md`.
+- `scripts/refresh.py`, stdlib only: rebuilds `data/index.json` and `docs/4-reference_index.md`
+  (generated, never edited by hand). `--self-test` runs in `ci.yml`; `refresh.yml` runs it daily.
+- `data/sources.json` (owners and watched repos), `data/tags.json` (FE, backend, DE, research,
+  workflow), `data/reviewed.json` (the blob each skill was last reviewed at).
+
+**Reviewing the queue.** Read only the skills under "Waiting for review" in the generated index,
+update the audit pages, then `python3 scripts/refresh.py --reviewed <repo:path>...` and tag new
+names in `data/tags.json`.
 
 ## Updating a row
 

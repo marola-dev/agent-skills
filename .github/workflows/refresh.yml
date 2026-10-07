@@ -1,0 +1,51 @@
+name: refresh
+
+# Rebuilds data/index.json and docs/4-reference_index.md from GitHub, with no model calls, and keeps
+# one rolling PR on chore/skills-refresh when anything changed.
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency: refresh
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BRANCH: chore/skills-refresh
+      # The PAT lets the PR start CI (a GITHUB_TOKEN PR does not); either reads public repos.
+      GH_TOKEN: ${{ secrets.MAROLA_CROSS_REPO_PAT || github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MAROLA_CROSS_REPO_PAT || github.token }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - id: run
+        run: |
+          python3 scripts/refresh.py | tee -a "$GITHUB_STEP_SUMMARY"
+          [ -z "$(git status --porcelain)" ] || echo "changed=true" >> "$GITHUB_OUTPUT"
+      - if: steps.run.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$BRANCH"
+          git add data docs
+          git commit -qm "chore: refresh the skills index" \
+            -m "Tested: scripts/refresh.py" -m "Cost: n/a (automation)" \
+            -m "Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push --force origin "$BRANCH"
+          body="$(sed -n '/^## Waiting for review/,/^## Own/p' docs/4-reference_index.md | sed '$d')"
+          pr="$(gh pr list --head "$BRANCH" --base main --state open --json number -q '.[0].number // empty')"
+          if [ -n "$pr" ]; then
+            gh pr edit "$pr" --body "$body"
+          else
+            gh pr create --head "$BRANCH" --base main --title "chore: refresh the skills index" --body "$body"
+          fi

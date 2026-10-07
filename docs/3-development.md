@@ -80,7 +80,32 @@ grep -oE '`[A-Za-z0-9_./-]+\.(md|sh|py|js|json|yml)`' <SKILL.md> | tr -d '`' | s
 The rest came from reading each skill's front matter (`allowed-tools`, `model`, `effort`,
 `disable-model-invocation`) against its repo's `AGENTS.md` and `.claude/settings.json`.
 
-## Refreshing
+## The daily refresh
+
+`scripts/refresh.py` does by API what the sections above do by hand, without spending model tokens:
+
+| Step | API calls |
+|---|---|
+| List each owner's public repos (forks and archived repos skipped) | 1 per 100 repos, a 304 when unchanged |
+| Each watched `owner/repo` | 1, a 304 when unchanged |
+| A repo's tree, only when it was pushed since the last run | 1 |
+| A `SKILL.md` or agent, only when its blob sha changed | 1 |
+
+A git blob sha is a hash of the file, so "identical to upstream" is two equal shas between an own
+skill and a watched one with the same name, and "changed since review" is a sha that differs from
+`data/reviewed.json`. Measured on 2026-10-07 against the six audited repos: 66 calls on a cold run,
+9 (all 304s) on the next.
+
+```bash
+python3 scripts/refresh.py --self-test   # offline, a fake API
+GH_TOKEN=… python3 scripts/refresh.py    # live; any token that reads public repos
+python3 scripts/refresh.py --reviewed marola-dev/marola-site:.claude/skills/break-ui/SKILL.md
+```
+
+`refresh.yml` reads with `MAROLA_CROSS_REPO_PAT` when this repo has access to that org secret, else
+the workflow's own token. Only the PAT makes the rolling PR start CI. Private repos are not listed.
+
+## Refreshing the audit
 
 Re-run the three comparisons above, update the rows whose evidence changed, and date the README's
 status line. When a flagged skill is fixed in its repo, delete its finding from
