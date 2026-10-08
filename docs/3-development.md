@@ -90,11 +90,18 @@ The rest came from reading each skill's front matter (`allowed-tools`, `model`, 
 | Each watched `owner/repo` | 1, a 304 when unchanged |
 | A repo's tree, only when it was pushed since the last run | 1 |
 | A `SKILL.md` or agent, only when its blob sha changed | 1 |
+| A repo's `skills.lock`, only when its blob sha changed | 1 |
 
-A git blob sha is a hash of the file, so "identical to upstream" is two equal shas between an own
-skill and a watched one with the same name, and "changed since review" is a sha that differs from
-`data/reviewed.json`. Measured on 2026-10-07 against the six audited repos: 66 calls on a cold run,
-9 (all 304s) on the next.
+A git blob sha is a hash of the file, so "changed since review" is a sha that differs from
+`data/reviewed.json`. Where a repo pins its vendored skills in a `skills.lock`
+(`.claude/skills/skills.lock`, or `plugins/*/skills/skills.lock` in the devkit; schema and tool in
+[MIP-0080](https://github.com/marola-dev/marola/pull/701)), the lock row is the upstream: the index
+shows "pinned" at the lock's commit, "behind upstream" when the watched upstream's current
+`SKILL.md` sha differs from the one the lock recorded (`upstream_files` when the row has
+`local_edits`, else `files`), or "held" with the reason. A skill with no lock row falls back to
+name matching: "identical to upstream" is two equal shas between an own skill and a watched one with
+the same name. Measured on 2026-10-07 against the six audited repos: 66 calls on a cold run, 9 (all
+304s) on the next.
 
 ```bash
 python3 scripts/refresh.py --self-test   # offline, a fake API

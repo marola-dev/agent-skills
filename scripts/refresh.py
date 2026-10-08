@@ -2,8 +2,11 @@
 """Refresh data/index.json and docs/4-reference_index.md from GitHub, with no model calls.
 
 Cost per run is GitHub API calls only: one listing per owner (a 304 when nothing changed), one tree
-per repo pushed since the last run, one blob per new or changed SKILL.md. A git blob sha is a hash
-of the content, so "same as upstream" and "changed since review" are sha comparisons.
+per repo pushed since the last run, one blob per new or changed SKILL.md or skills.lock. A git blob
+sha is a hash of the content, so "same as upstream", "behind upstream" and "changed since review"
+are sha comparisons. A repo's skills.lock (MIP-0080) names each vendored skill's upstream, the
+commit it was taken at and the blob shas it was taken with; a skill with no lock row falls back to
+matching a watched skill by name.
 """
 
 import argparse
@@ -22,6 +25,8 @@ ROOT = Path(__file__).resolve().parent.parent
 API = "https://api.github.com"
 SKILL_GLOBS = ("SKILL.md", "*/SKILL.md")
 AGENT_GLOBS = (".claude/agents/*.md", "plugins/*/agents/*.md")
+LOCK_GLOBS = (".claude/skills/skills.lock", "plugins/*/skills/skills.lock")
+LOCK_FIELDS = ("upstream", "path", "commit", "hold", "local_edits")
 SKIP_DIRS = ("node_modules/", ".devkit/", "vendor/", "test/", "tests/", "fixtures/")
 
 
@@ -32,6 +37,8 @@ def kind_of(path):
         return "skill"
     if any(fnmatch(path, g) for g in AGENT_GLOBS):
         return "agent"
+    if any(fnmatch(path, g) for g in LOCK_GLOBS):
+        return "lock"
     return None
 
 
@@ -41,7 +48,7 @@ def front_matter(text, path):
     name = re.search(r"^name:\s*['\"]?([^'\"\n]+)", fm, re.M)
     # A folded or quoted description spans lines until the next top-level key.
     desc = re.search(r"^description:\s*[>|]?-?\s*(.*?)(?=^\S+:|\Z)", fm, re.M | re.S)
-    fallback = path.rsplit("/", 2)[-2] if path.endswith("SKILL.md") else Path(path).stem
+    fallback = Path(path).parent.name or Path(path).stem
     text = " ".join(desc.group(1).split()).strip("'\"") if desc else ""
     return (name.group(1).strip() if name else fallback), text[:200]
 
@@ -105,24 +112,66 @@ def one_repo(gh, full):
     return {"repo": r["full_name"], "branch": r["default_branch"], "pushed_at": r["pushed_at"]}
 
 
-def scan_repo(gh, repo, old_skills):
+def blob_text(gh, repo, sha):
+    blob = gh.get(f"{API}/repos/{repo}/git/blobs/{sha}") or {}
+    return b64decode(blob.get("content", "")).decode("utf-8", "replace")
+
+
+def read_lock(gh, repo, path, sha):
+    """The skill rows of a skills.lock (MIP-0080, schema v1); an unreadable lock is empty."""
+    try:
+        data = json.loads(blob_text(gh, repo, sha))
+        rows = data["skills"] if data["version"] == 1 else {}
+    except (ValueError, KeyError, TypeError):
+        rows = {}
+    if not rows:
+        print(f"warning: {repo}:{path} is not a v1 skills.lock, ignored", file=sys.stderr)
+    out = {}
+    for name, row in rows.items():
+        entry = {f: row.get(f) for f in LOCK_FIELDS}
+        # With local_edits, `files` holds the edited copy; the pristine shas are upstream_files.
+        pristine = row.get("upstream_files") if row.get("local_edits") else row.get("files")
+        entry["upstream_blob"] = (pristine or {}).get("SKILL.md")
+        out[name] = entry
+    return {"blob": sha, "skills": out}
+
+
+def apply_locks(found, locks, repo):
+    for s in found.values():
+        s.pop("lock", None)
+    for key, lock in locks.items():
+        lock_dir = key.split(":", 1)[1].rsplit("/", 1)[0]
+        for name, row in lock["skills"].items():
+            s = found.get(f"{repo}:{lock_dir}/{name}/SKILL.md")
+            if s:
+                s["lock"] = row
+
+
+def scan_repo(gh, repo, old_skills, old_locks):
     tree = gh.get(f"{API}/repos/{repo['repo']}/git/trees/{repo['branch']}?recursive=1") or {}
     if tree.get("truncated"):
         print(
             f"warning: {repo['repo']} tree truncated, some skills may be missing", file=sys.stderr
         )
-    found = {}
+    found, locks = {}, {}
     for node in tree.get("tree", []):
         kind = node["type"] == "blob" and kind_of(node["path"])
         if not kind:
             continue
         key = f"{repo['repo']}:{node['path']}"
+        if kind == "lock":
+            prev = old_locks.get(key)
+            locks[key] = (
+                prev
+                if prev and prev["blob"] == node["sha"]
+                else read_lock(gh, repo["repo"], node["path"], node["sha"])
+            )
+            continue
         prev = old_skills.get(key)
         if prev and prev["blob"] == node["sha"]:
-            found[key] = prev
+            found[key] = dict(prev)
             continue
-        blob = gh.get(f"{API}/repos/{repo['repo']}/git/blobs/{node['sha']}") or {}
-        text = b64decode(blob.get("content", "")).decode("utf-8", "replace")
+        text = blob_text(gh, repo["repo"], node["sha"])
         name, desc = front_matter(text, node["path"])
         found[key] = {
             "repo": repo["repo"],
@@ -134,11 +183,13 @@ def scan_repo(gh, repo, old_skills):
             "first_seen": prev["first_seen"] if prev else str(date.today()),
             "changed": str(date.today()),
         }
-    return found
+    apply_locks(found, locks, repo["repo"])
+    return found, locks
 
 
 def refresh(gh, sources, state):
     old_repos, old_skills = state.get("repos", {}), state.get("skills", {})
+    old_locks = state.get("locks", {})
     listings, repos = dict(state.get("listings", {})), {}
     for group in ("own", "watch"):
         for entry in sources[group]:
@@ -150,17 +201,40 @@ def refresh(gh, sources, state):
                 listed = list_repos(gh, entry, listings)
             for r in listed:
                 repos[r["repo"]] = {**r, "group": group, "owner": entry.split("/")[0]}
-    skills = {}
+    skills, locks = {}, {}
     for full, repo in sorted(repos.items()):
         mine = {k: v for k, v in old_skills.items() if v["repo"] == full}
+        my_locks = {k: v for k, v in old_locks.items() if k.split(":", 1)[0] == full}
         prev = old_repos.get(full)
         if prev and prev["pushed_at"] == repo["pushed_at"] and prev["branch"] == repo["branch"]:
-            skills.update(mine)  # not pushed since last run: no tree call
+            found = mine  # not pushed since last run: no tree call
         else:
-            skills.update(scan_repo(gh, repo, mine))
+            found, my_locks = scan_repo(gh, repo, mine, my_locks)
+        skills.update(found)
+        locks.update(my_locks)
     for s in skills.values():
         s["group"] = repos[s["repo"]]["group"]
-    return {"repos": repos, "skills": skills, "etags": gh.etags, "listings": listings}
+    return {
+        "repos": repos,
+        "skills": skills,
+        "locks": locks,
+        "etags": gh.etags,
+        "listings": listings,
+    }
+
+
+def lock_status(index, s):
+    """pinned, behind upstream or held, with the upstream key, from the skill's lock row."""
+    lock = s["lock"]
+    up_key = f"{lock['upstream']}:{lock['path'] + '/' if lock['path'] else ''}SKILL.md"
+    up = index["skills"].get(up_key)
+    if lock["hold"]:
+        status = "held"
+    elif up and lock["upstream_blob"] and up["blob"] != lock["upstream_blob"]:
+        status = "behind upstream"
+    else:
+        status = "pinned"
+    return status, up_key
 
 
 def annotate(index, tags, reviewed):
@@ -170,11 +244,18 @@ def annotate(index, tags, reviewed):
             by_name.setdefault(s["name"], []).append(s)
     for key, s in index["skills"].items():
         s["tag"] = tags.get(s["name"], "untagged")
-        ups = [u for u in by_name.get(s["name"], []) if u["repo"] != s["repo"]]
-        same = [u for u in ups if u["blob"] == s["blob"]]
-        match = (same or ups or [None])[0]
-        s["upstream"] = ("identical to" if same else "differs from") if match else ""
-        s["upstream_of"] = f"{match['repo']}:{match['path']}" if match else ""
+        lock = s.get("lock") or {}
+        s["pin"] = lock.get("commit") or ""
+        s["hold"] = lock.get("hold") or ""
+        s["local_edits"] = lock.get("local_edits") or ""
+        if lock:
+            s["upstream"], s["upstream_of"] = lock_status(index, s)
+        else:
+            ups = [u for u in by_name.get(s["name"], []) if u["repo"] != s["repo"]]
+            same = [u for u in ups if u["blob"] == s["blob"]]
+            match = (same or ups or [None])[0]
+            s["upstream"] = ("identical to" if same else "differs from") if match else ""
+            s["upstream_of"] = f"{match['repo']}:{match['path']}" if match else ""
         if s["group"] == "own":
             s["review"] = (
                 "reviewed"
@@ -197,6 +278,15 @@ def render(index):
 
     def row(s):
         up = f"{s['upstream']} {link(s['upstream_of'])}" if s["upstream"] else ""
+        if s.get("pin"):
+            repo = s["upstream_of"].split(":", 1)[0]
+            up += f" at [{s['pin'][:7]}](https://github.com/{repo}/commit/{s['pin']})"
+        elif s.get("lock"):
+            up += " (commit unknown)"
+        if s.get("hold"):
+            up += f": {s['hold']}"
+        if s.get("local_edits"):
+            up += f", local edits `{s['local_edits']}`"
         where = link(f"{s['repo']}:{s['path']}")
         return (
             f"| `{s['name']}` | {s['kind']} | {s['tag']} | {where} | {up} | {s.get('review', '')} |"
@@ -344,6 +434,35 @@ def self_test():
         return {"content": b64encode(s.encode()).decode()}
 
     sk = "---\nname: ponytail\ndescription: >\n  Be lazy,\n  on purpose.\n---\nbody"
+    c1, c2 = "a" * 40, "b" * 40
+
+    def row(upstream, path, blob_sha, **extra):
+        return {
+            "upstream": upstream,
+            "path": path,
+            "commit": c1,
+            "files": {"SKILL.md": blob_sha, "LICENSE": "lic"},
+            "license": "MIT",
+            "local_edits": None,
+            "hold": None,
+            **extra,
+        }
+
+    lock = {
+        "version": 1,
+        "skills": {
+            "ponytail": row("up/y", "skills/ponytail", "b1"),
+            "humanizer": row("up/y", "", "h0", commit=c2),
+            "held": row("up/x", "skills/held", "k1", hold="waiting on #39"),
+            "edited": row(
+                "up/x",
+                "skills/edited",
+                "e2",
+                local_edits="edited.patch",
+                upstream_files={"SKILL.md": "e1", "LICENSE": "lic"},
+            ),
+        },
+    }
     responses = {
         "/users/me/repos?per_page=100&page=1": [
             {
@@ -362,22 +481,55 @@ def self_test():
             },
         ],
         "/repos/up/x": {"full_name": "up/x", "default_branch": "main", "pushed_at": "t1"},
+        "/repos/up/y": {"full_name": "up/y", "default_branch": "main", "pushed_at": "t1"},
         "/repos/me/a/git/trees/main?recursive=1": {
             "tree": [
+                {"path": ".claude/skills/skills.lock", "type": "blob", "sha": "l1"},
                 {"path": ".claude/skills/ponytail/SKILL.md", "type": "blob", "sha": "b1"},
+                {"path": ".claude/skills/plain/SKILL.md", "type": "blob", "sha": "p1"},
+                {"path": ".claude/skills/humanizer/SKILL.md", "type": "blob", "sha": "h0"},
+                {"path": ".claude/skills/held/SKILL.md", "type": "blob", "sha": "k1"},
+                {"path": ".claude/skills/edited/SKILL.md", "type": "blob", "sha": "e2"},
                 {"path": ".claude/agents/rev.md", "type": "blob", "sha": "b2"},
                 {"path": "node_modules/x/SKILL.md", "type": "blob", "sha": "b3"},
                 {"path": "README.md", "type": "blob", "sha": "b4"},
             ]
         },
         "/repos/up/x/git/trees/main?recursive=1": {
-            "tree": [{"path": "skills/ponytail/SKILL.md", "type": "blob", "sha": "b1"}]
+            "tree": [
+                {"path": "skills/ponytail/SKILL.md", "type": "blob", "sha": "b1"},
+                {"path": "skills/plain/SKILL.md", "type": "blob", "sha": "p1"},
+                {"path": "skills/held/SKILL.md", "type": "blob", "sha": "k2"},
+                {"path": "skills/edited/SKILL.md", "type": "blob", "sha": "e1"},
+            ]
         },
+        # The same ponytail bytes in a second watched repo: only the lock says which is upstream.
+        "/repos/up/y/git/trees/main?recursive=1": {
+            "tree": [
+                {"path": "skills/ponytail/SKILL.md", "type": "blob", "sha": "b1"},
+                {"path": "SKILL.md", "type": "blob", "sha": "h1"},
+            ]
+        },
+        "/repos/me/a/git/blobs/l1": blob(json.dumps(lock)),
         "/repos/me/a/git/blobs/b1": blob(sk),
         "/repos/up/x/git/blobs/b1": blob(sk),
+        "/repos/up/y/git/blobs/b1": blob(sk),
         "/repos/me/a/git/blobs/b2": blob("---\nname: rev\ndescription: Reviews.\n---\n"),
+        **{
+            f"/repos/{r}/git/blobs/{b}": blob(f"---\nname: {n}\ndescription: d\n---\n")
+            for r, b, n in (
+                ("me/a", "p1", "plain"),
+                ("me/a", "h0", "humanizer"),
+                ("me/a", "k1", "held"),
+                ("me/a", "e2", "edited"),
+                ("up/x", "p1", "plain"),
+                ("up/x", "k2", "held"),
+                ("up/x", "e1", "edited"),
+                ("up/y", "h1", "humanizer"),
+            )
+        },
     }
-    sources = {"own": ["me"], "watch": ["up/x"]}
+    sources = {"own": ["me"], "watch": ["up/x", "up/y"]}
     gh = Fake(responses)
     idx = annotate(
         refresh(gh, sources, {}), {"ponytail": "backend"}, {"me/a:.claude/agents/rev.md": "old"}
@@ -385,32 +537,71 @@ def self_test():
     s = idx["skills"]
     assert set(s) == {
         "me/a:.claude/skills/ponytail/SKILL.md",
+        "me/a:.claude/skills/plain/SKILL.md",
+        "me/a:.claude/skills/humanizer/SKILL.md",
+        "me/a:.claude/skills/held/SKILL.md",
+        "me/a:.claude/skills/edited/SKILL.md",
         "me/a:.claude/agents/rev.md",
         "up/x:skills/ponytail/SKILL.md",
+        "up/x:skills/plain/SKILL.md",
+        "up/x:skills/held/SKILL.md",
+        "up/x:skills/edited/SKILL.md",
+        "up/y:skills/ponytail/SKILL.md",
+        "up/y:SKILL.md",
     }, s.keys()
+    assert "skills.lock" not in str(s.keys())
     p = s["me/a:.claude/skills/ponytail/SKILL.md"]
     assert (p["name"], p["description"], p["tag"]) == (
         "ponytail",
         "Be lazy, on purpose.",
         "backend",
     ), p
-    assert (
-        p["upstream"] == "identical to" and p["upstream_of"] == "up/x:skills/ponytail/SKILL.md"
-    ), p
+    # Locked: the lock names the upstream, never the same-named copy in up/x.
+    up = {
+        k.split("/")[-2]: (v["upstream"], v["upstream_of"], v["pin"])
+        for k, v in s.items()
+        if v["repo"] == "me/a"
+    }
+    assert up["ponytail"] == ("pinned", "up/y:skills/ponytail/SKILL.md", c1), up["ponytail"]
+    assert up["humanizer"] == ("behind upstream", "up/y:SKILL.md", c2), up["humanizer"]
+    assert up["held"] == ("held", "up/x:skills/held/SKILL.md", c1), up["held"]
+    assert s["me/a:.claude/skills/held/SKILL.md"]["hold"] == "waiting on #39"
+    assert up["edited"] == ("pinned", "up/x:skills/edited/SKILL.md", c1), up["edited"]
+    assert s["me/a:.claude/skills/edited/SKILL.md"]["local_edits"] == "edited.patch"
+    # Unlocked: name matching as before.
+    assert up["plain"] == ("identical to", "up/x:skills/plain/SKILL.md", ""), up["plain"]
     assert p["review"] == "new", p
     assert s["me/a:.claude/agents/rev.md"]["review"] == "changed since review"
     assert "me/f" not in idx["repos"], "forks are skipped"
     first = gh.calls
 
-    unchanged = {**responses, "/users/me/repos?per_page=100&page=1": None, "/repos/up/x": None}
+    unchanged = {
+        **responses,
+        "/users/me/repos?per_page=100&page=1": None,
+        "/repos/up/x": None,
+        "/repos/up/y": None,
+    }
     gh2 = Fake(unchanged)  # 304s everywhere: no tree or blob calls, same index
     again = refresh(gh2, sources, idx)
     assert again["skills"].keys() == idx["skills"].keys()
     assert not [u for u in gh2.seen if "/git/" in u], gh2.seen
     assert gh2.calls < first, (gh2.calls, first)
 
+    pushed = dict(unchanged)  # me/a pushed, same blobs: one tree call, the lock not refetched
+    pushed["/users/me/repos?per_page=100&page=1"] = [
+        {**responses["/users/me/repos?per_page=100&page=1"][0], "pushed_at": "t2"}
+    ]
+    gh3 = Fake(pushed)
+    third = annotate(refresh(gh3, sources, again), {}, {})
+    git_calls = [u.replace(API, "") for u in gh3.seen if "/git/" in u]
+    assert git_calls == ["/repos/me/a/git/trees/main?recursive=1"], git_calls
+    assert third["skills"]["me/a:.claude/skills/held/SKILL.md"]["upstream"] == "held"
+
     page = render(annotate(again, {}, {}))
     assert "## Waiting for review" in page and "`rev`" in page
+    assert f"[{c1[:7]}](https://github.com/up/y/commit/{c1})" in page, page
+    assert "held [up/x]" in page and "waiting on #39" in page, page
+    assert "behind upstream [up/y]" in page, page
     assert front_matter("no front matter", "a/b/SKILL.md") == ("b", "")
     h = {"a/b": {"2026-09-01": [100, 1], "2026-09-10": [150, 2], "2026-10-07": [400, 9]}}
     assert gain(h["a/b"], "2026-10-07") == (300, "2026-09-01"), gain(h["a/b"], "2026-10-07")
