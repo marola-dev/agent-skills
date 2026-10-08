@@ -26,6 +26,9 @@ has it.
 - `README.md`, `docs/4-reference.md` (the hand-written audit) and `docs/4-reference_review.md`.
 - `scripts/refresh.py`, stdlib only: rebuilds `data/index.json` and `docs/4-reference_index.md`
   (generated, never edited by hand). `--self-test` runs in `ci.yml`; `refresh.yml` runs it daily.
+  A vendored skill's upstream, pin and hold come from its repo's `skills.lock`
+  ([MIP-0080](https://github.com/marola-dev/marola/pull/701)); a skill with no lock row is
+  matched to a watched skill by name.
 - `data/sources.json` (owners and watched repos), `data/tags.json` (FE, backend, DE, research,
   workflow), `data/reviewed.json` (the blob each skill was last reviewed at), `data/curated.json` (the README's
   top 20, chosen by hand) and `data/stars.json` (their star history, generated).
