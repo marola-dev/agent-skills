@@ -39,18 +39,89 @@ none.
 ## By tag
 
 Every skill carries one tag (two for `corpus-doc`); the [catalogue](docs/4-reference.md#tags)
-defines them.
+has each one's origin, test status and review notes. Jump to: [FE](#fe) · [backend](#backend) · [DE](#de) · [research](#research) · [workflow](#workflow).
 
-| Tag | Skills and agents |
-|---|---|
-| **FE** (17) | `site-frontend`, `citizen-science-site`, `ptbr-humanizer`, `frontend-design`, `webapp-testing`, `design-taste-frontend`, `emil-design-eng`, `review-animations`, `break-ui`, the eight `mapbox-*` |
-| **backend** (5 names, 8 copies) | `ponytail`, `ponytail-review`, `ponytail-audit` (devkit and ww3-gpu), `karpathy-guidelines`, agent `jar-verifier` |
-| **DE** (2) | `corpus-doc`, `voice-note-ingest` |
-| **research** (8 names, 10 copies) | `eli5` (umbrella and ww3-gpu, different skills), `humanizer` (devkit and ww3-gpu), `humanizar`, `citation-cff`, `zenodo-release`, `release`, `corpus-doc`, agent `revisor-proposta` |
-| **workflow** (11) | `mip`, `mip-tasks`, `mip-solve-perpetual`, `triage`, `sharingan`, `skill-copy`, `obsidian-vault`, `voice-to-feature`, `architecture-diagram`, agents `mip-reviewer`, `mip-claims-auditor` |
+### FE
+
+17 for the marola.dev map and pages: design, motion, testing, Mapbox.
+
+| Skill | Where | What it does |
+|---|---|---|
+| [`site-frontend`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/site-frontend/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/site-frontend/SKILL.md) | Use first for any change a visitor sees on marola.dev (site/static/*.html, app.js markup and markers, the Mapbox map and flow.js's wind a… |
+| [`citizen-science-site`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/citizen-science-site/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/citizen-science-site/SKILL.md) | Use when adding or reviewing a page, section or panel on marola.dev, to keep it an open-source citizen-science site people can trust and … |
+| [`ptbr-humanizer`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/ptbr-humanizer/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/ptbr-humanizer/SKILL.md) | Use when writing or reviewing any Portuguese (pt-BR) a visitor reads on marola.dev — site/i18n/pt-BR.json, the pt-BR articles in about.ht… |
+| [`frontend-design`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/frontend-design/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/frontend-design/SKILL.md) | Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. |
+| [`webapp-testing`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/webapp-testing/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/webapp-testing/SKILL.md) | Toolkit for interacting with and testing local web applications using Playwright. |
+| [`design-taste-frontend`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/design-taste-frontend/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/design-taste-frontend/SKILL.md) | Anti-slop frontend skill for landing pages, portfolios, and redesigns. |
+| [`emil-design-eng`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/emil-design-eng/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/emil-design-eng/SKILL.md) | This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make so… |
+| [`review-animations`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/review-animations/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/review-animations/SKILL.md) | Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. |
+| [`break-ui`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/break-ui/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/break-ui/SKILL.md) | Try to break a piece of UI by feeding it worst-case data — long names, unbreakable emails, one-letter names, missing fields, huge counts,… |
+| [`mapbox-cartography`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-cartography/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-cartography/SKILL.md) | Expert guidance on map design principles, color theory, visual hierarchy, typography, and cartographic best practices for creating effect… |
+| [`mapbox-data-visualization-patterns`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-data-visualization-patterns/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-data-visualization-patterns/SKILL.md) | Patterns for visualizing data on maps including choropleth maps, heat maps, 3D visualizations, data-driven styling, and animated data. |
+| [`mapbox-maplibre-migration`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-maplibre-migration/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-maplibre-migration/SKILL.md) | Guide for migrating from MapLibre GL JS to Mapbox GL JS, covering API compatibility, token setup, style configuration, and the benefits o… |
+| [`mapbox-style-patterns`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-style-patterns/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-style-patterns/SKILL.md) | Common style patterns, layer configurations, and recipes for typical mapping scenarios including restaurant finders, real estate, data vi… |
+| [`mapbox-style-quality`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-style-quality/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-style-quality/SKILL.md) | Expert guidance on validating, optimizing, and ensuring quality of Mapbox styles through validation, accessibility checks, and optimization. |
+| [`mapbox-token-security`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-token-security/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-token-security/SKILL.md) | Security best practices for Mapbox access tokens, including scope management, URL restrictions, rotation strategies, and protecting sensi… |
+| [`mapbox-web-integration-patterns`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-web-integration-patterns/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-web-integration-patterns/SKILL.md) | Official integration patterns for Mapbox GL JS across popular web frameworks (React, Vue, Svelte, Angular). |
+| [`mapbox-web-performance-patterns`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-web-performance-patterns/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/mapbox-web-performance-patterns/SKILL.md) | Performance optimization patterns for Mapbox GL JS web applications. |
+
+### backend
+
+5 for code quality and simplicity, and the Scala app.
+
+| Skill | Where | What it does |
+|---|---|---|
+| [`ponytail`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/ponytail/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/ponytail/SKILL.md), [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/ponytail/SKILL.md) | Forces the laziest solution that actually works, simplest, shortest, most minimal. |
+| [`ponytail-review`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/ponytail-review/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/ponytail-review/SKILL.md), [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/ponytail-review/SKILL.md) | Code review focused exclusively on over-engineering. |
+| [`ponytail-audit`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/ponytail-audit/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/ponytail-audit/SKILL.md), [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/ponytail-audit/SKILL.md) | Whole-repo audit for over-engineering. |
+| [`karpathy-guidelines`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/karpathy-guidelines/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/karpathy-guidelines/SKILL.md) | Behavioral guidelines to reduce common LLM coding mistakes. |
+| [`jar-verifier`](https://github.com/marola-dev/marola-app/blob/main/.claude/agents/jar-verifier.md) (agent) | [marola-app](https://github.com/marola-dev/marola-app/blob/main/.claude/agents/jar-verifier.md) | Verifies a Kyo (or any other pre-1.0/undocumented-drift-risk dependency) API by decompiling the actual pinned jar with javap, instead of … |
+
+### DE
+
+2 for getting data in: corpus documents, voice notes.
+
+| Skill | Where | What it does |
+|---|---|---|
+| [`corpus-doc`](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | [marola-corpus](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | Add a new document to marola's knowledge corpus (knowledge/*.md) — the ocean/sea-lore notes that --ask and the ask_ocean_question MCP too… |
+| [`voice-note-ingest`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/voice-note-ingest/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/voice-note-ingest/SKILL.md) | Transcribe a local voice note (WhatsApp .ogg, or similar) with local Whisper, write the transcript next to the audio, and anonymize it be… |
+
+### research
+
+8 for writing, citing and releasing research work.
+
+| Skill | Where | What it does |
+|---|---|---|
+| [`eli5`](https://github.com/marola-dev/marola/blob/main/.claude/skills/eli5/SKILL.md) | [marola](https://github.com/marola-dev/marola/blob/main/.claude/skills/eli5/SKILL.md), [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/eli5/SKILL.md) | Explains a topic to a newcomer: ocean and marola topics in the umbrella, wave modelling in ww3-gpu (two different skills). |
+| [`humanizer`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/humanizer/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/humanizer/SKILL.md), [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/humanizer/SKILL.md) | Rewrite AI-sounding text so it reads like the writer without changing what it says. |
+| [`humanizar`](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/humanizar/SKILL.md) | [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/humanizar/SKILL.md) | Reescreve textos em português brasileiro para soarem mais humanos e naturais, reduzindo padrões típicos de escrita gerada por IA sem alte… |
+| [`citation-cff`](https://github.com/marola-dev/marola/blob/main/.claude/skills/citation-cff/SKILL.md) | [marola](https://github.com/marola-dev/marola/blob/main/.claude/skills/citation-cff/SKILL.md) | This skill should be used when the user asks to "create citation file", "generate CITATION.cff", "validate citation", "update citation", … |
+| [`zenodo-release`](https://github.com/marola-dev/marola/blob/main/.claude/skills/zenodo-release/SKILL.md) | [marola](https://github.com/marola-dev/marola/blob/main/.claude/skills/zenodo-release/SKILL.md) | Cut a citable marola release and keep its Zenodo and citation metadata right. |
+| [`release`](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/release/SKILL.md) | [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/release/SKILL.md) | Cut a citable ww3-gpu release and keep its Zenodo/citation metadata right. |
+| [`corpus-doc`](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | [marola-corpus](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | Add a new document to marola's knowledge corpus (knowledge/*.md) — the ocean/sea-lore notes that --ask and the ask_ocean_question MCP too… |
+| [`revisor-proposta`](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/agents/revisor-proposta.md) (agent) | [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/agents/revisor-proposta.md) | Revisor científico da proposta de projeto de graduação (pubs/proposal). |
+
+### workflow
+
+11 for the team's process: MIPs, issues, stacked PRs, porting skills.
+
+| Skill | Where | What it does |
+|---|---|---|
+| [`mip`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/mip/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/mip/SKILL.md) | Write or revise a Marola Improvement Proposal (MIP) — a numbered design doc under docs/MIPs/ for any non-trivial feature, integration, or… |
+| [`mip-tasks`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/mip-tasks/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/mip-tasks/SKILL.md) | Turn an accepted MIP into an ordered task list and deliver it as small stacked PRs (one task = one branch = one PR, each based on the pre… |
+| [`mip-solve-perpetual`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/mip-solve-perpetual/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/mip-solve-perpetual/SKILL.md) | Overnight/unattended MIP-tasks runner. |
+| [`triage`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/triage/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/triage/SKILL.md) | Turn a raw idea, a voice-note fragment or a bug report into one well-formed marola issue — pick the tier, draft the body in the matching … |
+| [`sharingan`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/sharingan/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/sharingan/SKILL.md) | Port a skill, workflow or pattern from another repository into marola, given its URL — fetch the whole unit, check its licence, map every… |
+| [`skill-copy`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/skill-copy/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/skill-copy/SKILL.md) | Alias for sharingan — port a skill or pattern from another repository's URL into marola. |
+| [`obsidian-vault`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/obsidian-vault/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/obsidian-vault/SKILL.md) | Save and resume marola work sessions through the maintainer's Obsidian vault, and keep a linked marola digest note there. |
+| [`voice-to-feature`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/voice-to-feature/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/voice-to-feature/SKILL.md) | Presentation/demo pipeline — turn a recorded voice note directly into a scaffolded feature branch and a Draft PR, in one pass. |
+| [`architecture-diagram`](https://github.com/marola-dev/marola/blob/main/.claude/skills/architecture-diagram/SKILL.md) | [marola](https://github.com/marola-dev/marola/blob/main/.claude/skills/architecture-diagram/SKILL.md) | Draw a polished architecture or repo-map diagram as a hand-written SVG a README can embed: dark grid card, colour per kind of component, … |
+| [`mip-reviewer`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/agents/mip-reviewer.md) (agent) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/agents/mip-reviewer.md) | Reviews one PR of a marola MIP task stack against its MIP-NNNN.tasks.md row and the MIP's own Scoring/Verification-plan sections, reporti… |
+| [`mip-claims-auditor`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/agents/mip-claims-auditor.md) (agent) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/agents/mip-claims-auditor.md) | Audits one MIP's §4 (Data sources and dependencies reviewed) for unsourced external claims — a price, a count, an HTTP status, a licence … |
 
 **workflow** is a fifth tag: these skills run the team's process (MIPs, issues, stacked PRs,
 porting skills) and fit none of the other four.
+
 
 ## Featured: Graphify
 
