@@ -37,6 +37,19 @@ has it.
 update the audit pages, then `python3 scripts/refresh.py --reviewed <repo:path>...` and tag new
 names in `data/tags.json`.
 
+## Commands
+
+```bash
+nix develop               # python, ruff, the lint tools and the devkit's tools; links .devkit
+just quality              # every gate CI runs: ruff, refresh.py --self-test, actionlint, agents-check, docs-lint
+just refresh              # rebuild the generated index from GitHub (needs GH_TOKEN)
+```
+
+The devkit's git hooks (`core.hooksPath .devkit/.githooks`, set by the dev shell) run
+`just precommit` and `just prepush`. The devkit is pinned to one tag in `flake.nix`, every
+`@v…`/`devkit-ref` in `.github/workflows/` and the marketplace `ref` in `.claude/settings.json`;
+they move together.
+
 ## Updating a row
 
 A status is a claim, so it carries its evidence: the commit whose `Tested:` trailer records the

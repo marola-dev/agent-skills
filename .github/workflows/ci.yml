@@ -1,5 +1,8 @@
 name: ci
 
+# The devkit's reusable workflows at the pinned tag (MIP-0070 §5.6). Bump the tag here, the
+# devkit-ref inputs, flake.nix's input and .claude/settings.json's marketplace ref together.
+
 on:
   pull_request:
   push:
@@ -8,15 +11,20 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - run: pipx run ruff check . && pipx run ruff format --check .
-      - run: python3 scripts/refresh.py --self-test
-      - run: |
-          for f in data/*.json; do python3 -m json.tool "$f" > /dev/null; done
+  python:
+    uses: marola-dev/marola-devkit/.github/workflows/python-ci.yml@v0.8.3
+    with:
+      self-test-commands: |
+        python3 scripts/refresh.py --self-test
+        for f in data/*.json; do python3 -m json.tool "$f" > /dev/null; done
+        git -c advice.detachedHead=false clone -q --depth 1 -b v0.8.3 https://github.com/marola-dev/marola-devkit /tmp/devkit && python3 /tmp/devkit/scripts/docs_lint.py .
+
+  agents:
+    uses: marola-dev/marola-devkit/.github/workflows/agents-check.yml@v0.8.3
+    with:
+      devkit-ref: v0.8.3

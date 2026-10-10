@@ -47,9 +47,9 @@ has each one's origin, test status and review notes. Jump to: [FE](#fe) · [back
 
 | Skill | Where | What it does |
 |---|---|---|
-| [`site-frontend`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/site-frontend/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/site-frontend/SKILL.md) | Use first for any change a visitor sees on marola.dev (site/static/*.html, app.js markup and markers, the Mapbox map and flow.js's wind a… |
+| [`site-frontend`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/site-frontend/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/site-frontend/SKILL.md) | Use first for any change a visitor sees on marola.dev … |
 | [`citizen-science-site`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/citizen-science-site/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/citizen-science-site/SKILL.md) | Use when adding or reviewing a page, section or panel on marola.dev, to keep it an open-source citizen-science site people can trust and … |
-| [`ptbr-humanizer`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/ptbr-humanizer/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/ptbr-humanizer/SKILL.md) | Use when writing or reviewing any Portuguese (pt-BR) a visitor reads on marola.dev — site/i18n/pt-BR.json, the pt-BR articles in about.ht… |
+| [`ptbr-humanizer`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/ptbr-humanizer/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/ptbr-humanizer/SKILL.md) | Use when writing or reviewing any Portuguese (pt-BR) a visitor reads on marola.dev … |
 | [`frontend-design`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/frontend-design/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/frontend-design/SKILL.md) | Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. |
 | [`webapp-testing`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/webapp-testing/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/webapp-testing/SKILL.md) | Toolkit for interacting with and testing local web applications using Playwright. |
 | [`design-taste-frontend`](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/design-taste-frontend/SKILL.md) | [marola-site](https://github.com/marola-dev/marola-site/blob/main/.claude/skills/design-taste-frontend/SKILL.md) | Anti-slop frontend skill for landing pages, portfolios, and redesigns. |
@@ -83,7 +83,7 @@ has each one's origin, test status and review notes. Jump to: [FE](#fe) · [back
 
 | Skill | Where | What it does |
 |---|---|---|
-| [`corpus-doc`](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | [marola-corpus](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | Add a new document to marola's knowledge corpus (knowledge/*.md) — the ocean/sea-lore notes that --ask and the ask_ocean_question MCP too… |
+| [`corpus-doc`](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | [marola-corpus](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | Add a new document to marola's knowledge corpus — the ocean/sea-lore notes that --ask and the ask_ocean_question MCP too… |
 | [`voice-note-ingest`](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/voice-note-ingest/SKILL.md) | [marola-devkit](https://github.com/marola-dev/marola-devkit/blob/main/plugins/marola-devkit/skills/voice-note-ingest/SKILL.md) | Transcribe a local voice note (WhatsApp .ogg, or similar) with local Whisper, write the transcript next to the audio, and anonymize it be… |
 
 ### research
@@ -98,7 +98,7 @@ has each one's origin, test status and review notes. Jump to: [FE](#fe) · [back
 | [`citation-cff`](https://github.com/marola-dev/marola/blob/main/.claude/skills/citation-cff/SKILL.md) | [marola](https://github.com/marola-dev/marola/blob/main/.claude/skills/citation-cff/SKILL.md) | This skill should be used when the user asks to "create citation file", "generate CITATION.cff", "validate citation", "update citation", … |
 | [`zenodo-release`](https://github.com/marola-dev/marola/blob/main/.claude/skills/zenodo-release/SKILL.md) | [marola](https://github.com/marola-dev/marola/blob/main/.claude/skills/zenodo-release/SKILL.md) | Cut a citable marola release and keep its Zenodo and citation metadata right. |
 | [`release`](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/release/SKILL.md) | [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/skills/release/SKILL.md) | Cut a citable ww3-gpu release and keep its Zenodo/citation metadata right. |
-| [`corpus-doc`](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | [marola-corpus](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | Add a new document to marola's knowledge corpus (knowledge/*.md) — the ocean/sea-lore notes that --ask and the ask_ocean_question MCP too… |
+| [`corpus-doc`](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | [marola-corpus](https://github.com/marola-dev/marola-corpus/blob/main/.claude/skills/corpus-doc/SKILL.md) | Add a new document to marola's knowledge corpus — the ocean/sea-lore notes that --ask and the ask_ocean_question MCP too… |
 | [`revisor-proposta`](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/agents/revisor-proposta.md) (agent) | [ww3-gpu](https://github.com/h0ffmann/ww3-gpu/blob/main/.claude/agents/revisor-proposta.md) | Revisor científico da proposta de projeto de graduação (pubs/proposal). |
 
 ### workflow
@@ -206,7 +206,8 @@ it also covers ww3-gpu.
 | Direction | Contract |
 |---|---|
 | repos → this | Read-only: the skills are read from each repo's `main`; nothing here is copied back |
-| this → umbrella | `README.md` and `docs/`, once this repo is added to the docs build |
+| this → umbrella | `submodule-updated` on every push to `main`, and `submodule-docs-updated` when `README.md` or `docs/` changed (`notify-umbrella.yml`) |
+| devkit → this | `marola-devkit`, pinned to one tag in `flake.nix`, the workflows and `.claude/settings.json` |
 
 [AGENTS.md](AGENTS.md) holds the rules for agents working here. MIT licence; each skill keeps the
 licence of the repo it lives in.
