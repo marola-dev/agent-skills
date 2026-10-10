@@ -1,0 +1,46 @@
+{
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "extraKnownMarketplaces": {
+    "marola-devkit": { "source": { "source": "github", "repo": "marola-dev/marola-devkit", "ref": "v0.8.3" } }
+  },
+  "enabledPlugins": { "marola-devkit@marola-devkit": true },
+  "permissions": {
+    "allow": [
+      "Bash(gh auth status:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(just uprd:*)",
+      "Bash(just quality*)",
+      "Bash(uprd:*)",
+      "Bash(cost-split:*)",
+      "Bash(python3 scripts/refresh.py --self-test*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git fetch*)",
+      "Bash(git rev-parse*)",
+      "Bash(command -v *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Bash(gh pr merge*)",
+      "Bash(gh pr close*)",
+      "Bash(gh stack merge*)",
+      "Bash(gh stack unstack*)",
+      "Bash(gh stack delete*)",
+      "Bash(gh release*)",
+      "Bash(git tag*)",
+      "Bash(git push --tags*)"
+    ]
+  }
+}
