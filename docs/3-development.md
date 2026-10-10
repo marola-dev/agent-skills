@@ -114,8 +114,9 @@ appends its stars and forks to `data/stars.json`, and rewrites the README's top-
 the `top-repos` markers, ranked by stars gained over 30 days. Picking the 20 stays a human edit to
 `data/curated.json`; the numbers are the refresh's.
 
-`refresh.yml` reads with `MAROLA_CROSS_REPO_PAT` when this repo has access to that org secret, else
-the workflow's own token. Only the PAT makes the rolling PR start CI. Private repos are not listed.
+`refresh.yml` reads and opens its rolling PR with the workflow's own token, then dispatches
+`ci.yml` on the branch, since a PR opened with that token starts no workflow. Private repos are not
+listed.
 
 ## Refreshing the audit
 
