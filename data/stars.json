@@ -1,0 +1,112 @@
+{
+ "Agents365-ai/drawio-skill": {
+  "2026-10-10": [
+   10050,
+   707
+  ]
+ },
+ "Graphify-Labs/graphify": {},
+ "K-Dense-AI/scientific-agent-skills": {
+  "2026-10-10": [
+   48252,
+   4339
+  ]
+ },
+ "NVIDIA/SkillSpector": {
+  "2026-10-10": [
+   19836,
+   1736
+  ]
+ },
+ "Orchestra-Research/AI-Research-SKILLs": {},
+ "VoltAgent/awesome-agent-skills": {
+  "2026-10-10": [
+   35459,
+   3824
+  ]
+ },
+ "addyosmani/agent-skills": {
+  "2026-10-10": [
+   104318,
+   10889
+  ]
+ },
+ "affaan-m/ECC": {
+  "2026-10-10": [
+   276241,
+   41211
+  ]
+ },
+ "alibaba/open-code-review": {
+  "2026-10-10": [
+   45739,
+   3301
+  ]
+ },
+ "cathrynlavery/diagram-design": {
+  "2026-10-10": [
+   48476,
+   3062
+  ]
+ },
+ "cloudflare/security-audit-skill": {
+  "2026-10-10": [
+   27188,
+   1636
+  ]
+ },
+ "mattpocock/skills": {
+  "2026-10-10": [
+   283644,
+   23760
+  ]
+ },
+ "max-sixty/worktrunk": {
+  "2026-10-10": [
+   9168,
+   328
+  ]
+ },
+ "mksglu/context-mode": {
+  "2026-10-10": [
+   26057,
+   1879
+  ]
+ },
+ "nexu-io/open-design": {
+  "2026-10-10": [
+   100323,
+   11572
+  ]
+ },
+ "teng-lin/notebooklm-py": {
+  "2026-10-10": [
+   19676,
+   2618
+  ]
+ },
+ "thedotmack/claude-mem": {
+  "2026-10-10": [
+   99106,
+   8678
+  ]
+ },
+ "tigerless-labs/autoharness": {
+  "2026-10-10": [
+   10947,
+   608
+  ]
+ },
+ "tt-a1i/archify": {
+  "2026-10-10": [
+   81508,
+   5504
+  ]
+ },
+ "yusufkaraaslan/Skill_Seekers": {
+  "2026-10-10": [
+   15119,
+   1542
+  ]
+ }
+}

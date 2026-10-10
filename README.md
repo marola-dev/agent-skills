@@ -142,31 +142,26 @@ of history, "Gained" counts from its first reading.
 <!-- top-repos:start -->
 | # | Repository | Stars | Forks | Gained | Tag | Why it is here |
 |---|---|---|---|---|---|---|
-| 1 | [tt-a1i/archify](https://github.com/tt-a1i/archify) | 78.7k |  | +38,190 in Sep | FE | Architecture and workflow diagrams as self-contained HTML; the same job as the umbrella's `architecture-diagram` |
-| 2 | [nexu-io/open-design](https://github.com/nexu-io/open-design) | 99.2k |  |  | FE | Design-system skills for agent-built UI; a candidate next to marola-site's `design-taste-frontend` |
-| 3 | [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) | 43.1k |  |  | FE | Diagram design rules for docs and READMEs (MIP-0068's diagrams) |
-| 4 | [Agents365-ai/drawio-skill](https://github.com/Agents365-ai/drawio-skill) | 5.8k* |  |  | FE | draw.io diagrams from text, for proposal and docs figures |
-| 5 | [mattpocock/skills](https://github.com/mattpocock/skills) | 278.2k |  | +1.1k on Oct 6 | backend | An engineer's day-to-day skills; the most starred skills repo this month |
-| 6 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 102.1k |  | +538 on Oct 6 | backend | Production engineering skills: testing, performance, review |
-| 7 | [affaan-m/ECC](https://github.com/affaan-m/ECC) | 274.3k |  | +26,563 in Sep | backend | A whole agent harness (skills, memory, security); compare with marola-devkit before borrowing |
-| 8 | [alibaba/open-code-review](https://github.com/alibaba/open-code-review) | 43.4k |  |  | backend | Code review skills, next to `ponytail-review` and Claude Code Review |
-| 9 | [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | 25.4k |  | +559 on Oct 6 | backend | Multi-phase security audit with machine-readable findings, for the app and the site |
-| 10 | [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) | 18.8k |  | +3,388 in Sep | research | Scans a skill for risks before it is installed; automates part of this repo's audit |
-| 11 | [mksglu/context-mode](https://github.com/mksglu/context-mode) | 24.5k |  | +4,165 in Sep | backend | Context-window savings for agents, the token budget this repo optimises for |
-| 12 | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | 124.7k |  |  | backend | Codebase knowledge graph; marola adopts it through MIP-0076 (docs/4-reference_graphify.md) |
-| 13 | [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) | 87.3k* |  |  | backend | Memory across sessions; overlaps the devkit's `obsidian-vault` handoffs |
-| 14 | [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | 47.9k |  |  | research | 177 science skills: scientific writing, peer review, marine carbonate chemistry, CFD, GPU, Polars and Dask |
-| 15 | [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs) | 10.7k* |  |  | research | ML research and training skills, for marola-ml's fine-tune and benchmark |
-| 16 | [teng-lin/notebooklm-py](https://github.com/teng-lin/notebooklm-py) | 17.8k* |  |  | research | NotebookLM from an agent, for literature and proposal reading |
-| 17 | [yusufkaraaslan/Skill_Seekers](https://github.com/yusufkaraaslan/Skill_Seekers) | 14.5k* |  |  | DE | Turns documentation sites, repos and PDFs into skills, e.g. the WAVEWATCH III manual for ww3-gpu |
-| 18 | [tigerless-labs/autoharness](https://github.com/tigerless-labs/autoharness) | 9.0k |  | +1.0k on Oct 6 | DE | Distils skills from past sessions and prunes unused ones |
-| 19 | [max-sixty/worktrunk](https://github.com/max-sixty/worktrunk) | 8.6k |  | +1,884 in Sep | backend | Git worktrees for parallel agents, the devkit's stacked-PR worktrees |
-| 20 | [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) | 35.1k |  |  | research | A curated directory of 1,000+ skills, to search before writing one |
-
-Seed values from 2026-10-07, before the first refresh: stars from GitHub's pages, "in Sep" from
-[GitHub Rank's monthly trending](https://wangchujiang.com/github-rank/trending-monthly.html) (2026-10-01),
-"on Oct 6" from [gittrend.io](https://gittrend.io/trending/ai-skills); * marks a count from a cached
-topic page, likely low.
+| 1 | [mattpocock/skills](https://github.com/mattpocock/skills) | 283,644 | 23,760 |  | backend | An engineer's day-to-day skills; the most starred skills repo this month |
+| 2 | [affaan-m/ECC](https://github.com/affaan-m/ECC) | 276,241 | 41,211 |  | backend | A whole agent harness (skills, memory, security); compare with marola-devkit before borrowing |
+| 3 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 104,318 | 10,889 |  | backend | Production engineering skills: testing, performance, review |
+| 4 | [nexu-io/open-design](https://github.com/nexu-io/open-design) | 100,323 | 11,572 |  | FE | Design-system skills for agent-built UI; a candidate next to marola-site's `design-taste-frontend` |
+| 5 | [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) | 99,106 | 8,678 |  | backend | Memory across sessions; overlaps the devkit's `obsidian-vault` handoffs |
+| 6 | [tt-a1i/archify](https://github.com/tt-a1i/archify) | 81,508 | 5,504 |  | FE | Architecture and workflow diagrams as self-contained HTML; the same job as the umbrella's `architecture-diagram` |
+| 7 | [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) | 48,476 | 3,062 |  | FE | Diagram design rules for docs and READMEs (MIP-0068's diagrams) |
+| 8 | [K-Dense-AI/scientific-agent-skills](https://github.com/K-Dense-AI/scientific-agent-skills) | 48,252 | 4,339 |  | research | 177 science skills: scientific writing, peer review, marine carbonate chemistry, CFD, GPU, Polars and Dask |
+| 9 | [alibaba/open-code-review](https://github.com/alibaba/open-code-review) | 45,739 | 3,301 |  | backend | Code review skills, next to `ponytail-review` and Claude Code Review |
+| 10 | [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) | 35,459 | 3,824 |  | research | A curated directory of 1,000+ skills, to search before writing one |
+| 11 | [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | 27,188 | 1,636 |  | backend | Multi-phase security audit with machine-readable findings, for the app and the site |
+| 12 | [mksglu/context-mode](https://github.com/mksglu/context-mode) | 26,057 | 1,879 |  | backend | Context-window savings for agents, the token budget this repo optimises for |
+| 13 | [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) | 19,836 | 1,736 |  | research | Scans a skill for risks before it is installed; automates part of this repo's audit |
+| 14 | [teng-lin/notebooklm-py](https://github.com/teng-lin/notebooklm-py) | 19,676 | 2,618 |  | research | NotebookLM from an agent, for literature and proposal reading |
+| 15 | [yusufkaraaslan/Skill_Seekers](https://github.com/yusufkaraaslan/Skill_Seekers) | 15,119 | 1,542 |  | DE | Turns documentation sites, repos and PDFs into skills, e.g. the WAVEWATCH III manual for ww3-gpu |
+| 16 | [tigerless-labs/autoharness](https://github.com/tigerless-labs/autoharness) | 10,947 | 608 |  | DE | Distils skills from past sessions and prunes unused ones |
+| 17 | [Agents365-ai/drawio-skill](https://github.com/Agents365-ai/drawio-skill) | 10,050 | 707 |  | FE | draw.io diagrams from text, for proposal and docs figures |
+| 18 | [max-sixty/worktrunk](https://github.com/max-sixty/worktrunk) | 9,168 | 328 |  | backend | Git worktrees for parallel agents, the devkit's stacked-PR worktrees |
+| 19 | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) |  |  |  | backend | Codebase knowledge graph; marola adopts it through MIP-0076 (docs/4-reference_graphify.md) |
+| 20 | [Orchestra-Research/AI-Research-SKILLs](https://github.com/Orchestra-Research/AI-Research-SKILLs) |  |  |  | research | ML research and training skills, for marola-ml's fine-tune and benchmark |
 <!-- top-repos:end -->
 
 ## Review findings
