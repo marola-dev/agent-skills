@@ -17,14 +17,13 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      # To dispatch ci.yml on the rolling branch (below).
+      actions: write
     env:
       BRANCH: chore/skills-refresh
-      # The PAT lets the PR start CI (a GITHUB_TOKEN PR does not); either reads public repos.
-      GH_TOKEN: ${{ secrets.MAROLA_CROSS_REPO_PAT || github.token }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.MAROLA_CROSS_REPO_PAT || github.token }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -49,3 +48,5 @@ jobs:
           else
             gh pr create --head "$BRANCH" --base main --title "chore: refresh the skills index" --body "$body"
           fi
+          # A PR opened with GITHUB_TOKEN starts no workflow; a workflow_dispatch from it does.
+          gh workflow run ci.yml --ref "$BRANCH"
