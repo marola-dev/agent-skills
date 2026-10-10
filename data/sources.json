@@ -15,6 +15,8 @@
   "zircote/github-social",
   "Cocoon-AI/architecture-diagram-generator",
   "Graphify-Labs/graphify",
-  "Orchestra-Research/AI-Research-SKILLs"
+  "Orchestra-Research/AI-Research-SKILLs",
+  "cloudflare/skills",
+  "duckdb/duckdb-skills"
  ]
 }

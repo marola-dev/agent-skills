@@ -1,0 +1,222 @@
+{
+ "mip": "MIP-0075",
+ "repos": [
+  "marola-dev/marola-oods",
+  "marola-dev/marola-app"
+ ],
+ "skills": [
+  {
+   "name": "oods-lake",
+   "upstream": "",
+   "path": "",
+   "commit": "",
+   "license": "",
+   "jobs": [
+    "INIT",
+    "MANAGE",
+    "GOV",
+    "DEBUG",
+    "CONNECT"
+   ],
+   "into": "write in marola-oods (marola-dev/marola-oods#23)",
+   "adopt_as": "oods-lake",
+   "why": "The lake's own skill: migrations, time travel and recovery, maintenance, `checks.sql` as a gate, the R2 tokens and bucket rules",
+   "caveat": "Stacks on marola-dev/marola-oods#22; its first PR (#24) closed unmerged"
+  },
+  {
+   "name": "oods-lake-reviewer",
+   "upstream": "",
+   "path": "",
+   "commit": "",
+   "license": "",
+   "jobs": [
+    "GOV",
+    "DEBUG"
+   ],
+   "into": "write in marola-oods (agent)",
+   "adopt_as": "oods-lake-reviewer",
+   "why": "Read-only review of a MIP-0075 diff against the lake's invariants: one writer, upload before export, no persistent secret, inlining off, applied migrations never edited, no glob over `lake/`",
+   "caveat": "Reports, never edits; a person decides"
+  },
+  {
+   "name": "cloudflare",
+   "upstream": "cloudflare/skills",
+   "path": "skills/cloudflare",
+   "commit": "0871daceb347e3c51693fbe9c77555468df7e410",
+   "license": "Apache-2.0",
+   "jobs": [
+    "INIT",
+    "GOV"
+   ],
+   "into": "vendor into marola-oods",
+   "adopt_as": "",
+   "why": "Cloudflare's own product map, with `references/r2/` (S3 API, tokens, lifecycle, limits, pricing, gotchas)",
+   "caveat": "Points at live docs, not facts; R2 setup stays a person's (MIP-0075 §5.6)"
+  },
+  {
+   "name": "s3-explore",
+   "upstream": "duckdb/duckdb-skills",
+   "path": "skills/s3-explore",
+   "commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+   "license": "MIT",
+   "jobs": [
+    "CONNECT",
+    "DEBUG"
+   ],
+   "into": "vendor into marola-oods",
+   "adopt_as": "",
+   "why": "Lists the bucket and reads Parquet metadata without downloading data (`read_blob` without `content`, `parquet_metadata`)",
+   "caveat": "Its R2 row is a `TYPE R2` secret on `r2://`; the lake uses `TYPE s3` on `s3://` (§4.4). Its `FROM '<glob>'` preview returns wrong rows on `lake/` after an update: list and read metadata only, query through an attach"
+  },
+  {
+   "name": "attach-db",
+   "upstream": "duckdb/duckdb-skills",
+   "path": "skills/attach-db",
+   "commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+   "license": "MIT",
+   "jobs": [
+    "CONNECT"
+   ],
+   "into": "vendor into marola-oods",
+   "adopt_as": "",
+   "why": "Attaches a local copy of `oods.ducklake` and keeps the session for `query`",
+   "caveat": "Its `state.sql` may hold secrets in plain text: attach `READ_ONLY`, keep the R2 secret out of it"
+  },
+  {
+   "name": "query",
+   "upstream": "duckdb/duckdb-skills",
+   "path": "skills/query",
+   "commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+   "license": "MIT",
+   "jobs": [
+    "DEBUG"
+   ],
+   "into": "vendor into marola-oods",
+   "adopt_as": "",
+   "why": "Runs SQL on the attached lake (`beach_point`, `fetch_run`, `AT (VERSION => n)`); sets `allow_persistent_secrets=false`",
+   "caveat": "Read-only by use, not by design: the attach must be `READ_ONLY`"
+  },
+  {
+   "name": "duckdb-docs",
+   "upstream": "duckdb/duckdb-skills",
+   "path": "skills/duckdb-docs",
+   "commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+   "license": "MIT",
+   "jobs": [
+    "DEBUG",
+    "MANAGE"
+   ],
+   "into": "vendor into marola-oods",
+   "adopt_as": "",
+   "why": "Full-text search over the DuckDB and DuckLake docs, so an answer cites the version the lake pins",
+   "caveat": "Downloads the search indexes and installs `httpfs` and `fts` locally; never in a job"
+  },
+  {
+   "name": "motherduck-ducklake",
+   "upstream": "motherduckdb/agent-skills",
+   "path": "skills/motherduck-ducklake",
+   "commit": "f97855858bee6cff552031358666824cf01754c5",
+   "license": "MIT",
+   "jobs": [
+    "MANAGE"
+   ],
+   "into": "port into oods-lake",
+   "adopt_as": "oods-lake",
+   "why": "DuckLake maintenance as explicit operations (`ducklake_flush_inlined_data`, `merge_adjacent_files`), the single-writer reality, the version matrix",
+   "caveat": "Written for MotherDuck: keep the DuckLake parts, drop the product's"
+  },
+  {
+   "name": "iceberg",
+   "upstream": "gordonmurray/data-engineering-skills",
+   "path": "iceberg",
+   "commit": "3547aef2e488de606ce03118d0fac6ecf941a5f2",
+   "license": "MIT",
+   "jobs": [
+    "MANAGE"
+   ],
+   "into": "port into oods-lake",
+   "adopt_as": "oods-lake",
+   "why": "The Inspect first, Decide, Safety, Verify shape; retention windows, orphan cleanup, rollback",
+   "caveat": "Iceberg, not DuckLake: structure and rules only"
+  },
+  {
+   "name": "hops-table-maintenance",
+   "upstream": "logicalclocks/hopsworks-api",
+   "path": "python/hopsworks/skills/data/hops-table-maintenance",
+   "commit": "37ce5742e2d29c8e9ff0b8b925f58ad371a43c22",
+   "license": "Apache-2.0",
+   "jobs": [
+    "MANAGE"
+   ],
+   "into": "port into oods-lake",
+   "adopt_as": "oods-lake",
+   "why": "Evidence from a script, a reviewable plan, approval per destructive step, dry run, before and after",
+   "caveat": "Spark and feature groups: the workflow only"
+  },
+  {
+   "name": "b2-cloud-storage",
+   "upstream": "backblaze-labs/claude-skill-b2-cloud-storage",
+   "path": "skills/b2-cloud-storage",
+   "commit": "422d0a435fc0cd0a1bc5e270aefca820ca40cf31",
+   "license": "MIT",
+   "jobs": [
+    "GOV",
+    "MANAGE"
+   ],
+   "into": "port into oods-lake",
+   "adopt_as": "oods-lake",
+   "why": "Object-store safety rules (read-only by default, dry run and an explicit yes before a delete, never public) and the size and cost audit",
+   "caveat": "Re-point from B2 to R2: no versioning, no spend cap"
+  },
+  {
+   "name": "troubleshooting-dbt-job-errors",
+   "upstream": "dbt-labs/dbt-agent-skills",
+   "path": "skills/dbt/skills/troubleshooting-dbt-job-errors",
+   "commit": "168a2b0b92da59be88866257140907c206ff0e44",
+   "license": "Apache-2.0",
+   "jobs": [
+    "DEBUG"
+   ],
+   "into": "port into oods-lake",
+   "adopt_as": "oods-lake",
+   "why": "Diagnosing a failed scheduled job from its logs, history and data, and \"never modify a test to make it pass\" (for `checks.sql`)",
+   "caveat": "dbt Cloud: map its logs and API to the Actions run and `fetch_run`"
+  },
+  {
+   "name": "security-audit",
+   "upstream": "cloudflare/security-audit-skill",
+   "path": "skills/security-audit",
+   "commit": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8",
+   "license": "MIT",
+   "jobs": [
+    "GOV"
+   ],
+   "into": "vendor into marola-oods",
+   "adopt_as": "",
+   "why": "A security review of the ETL workflows and the `oods` module, which hold the R2 write token",
+   "caveat": "Run its full workflow only on an explicit audit request; findings go to a person"
+  }
+ ],
+ "left_out": [
+  {
+   "name": "wrangler",
+   "upstream": "cloudflare/skills",
+   "why": "The lake uses the AWS CLI and DuckDB's S3 API, not Wrangler; the bucket and tokens are a person's. A fit for marola-site's Worker (#12)"
+  },
+  {
+   "name": "basin",
+   "upstream": "cloudflare/skills",
+   "why": "R2 Iceberg tables through Basin Catalog: a different table format and a paid product path, rejected by MIP-0075 §4.4"
+  },
+  {
+   "name": "install-duckdb",
+   "upstream": "duckdb/duckdb-skills",
+   "why": "Installs extensions from the network; MIP-0075 row 2 pins them by sha256 and a job never downloads code"
+  },
+  {
+   "name": "motherduck-connect, motherduck-security-governance",
+   "upstream": "motherduckdb/agent-skills",
+   "why": "MotherDuck's service, which the lake does not use"
+  }
+ ]
+}

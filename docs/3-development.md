@@ -114,6 +114,12 @@ appends its stars and forks to `data/stars.json`, and rewrites the README's top-
 the `top-repos` markers, ranked by stars gained over 30 days. Picking the 20 stays a human edit to
 `data/curated.json`; the numbers are the refresh's.
 
+It also counts the OODS lake skills of `data/oods.json` adopted in MIP-0075's repos, from the same
+index: a vendored one by its `skills.lock` row, a ported one by the in-house skill it went into. The
+count goes into the README between the `oods` markers and the table into
+[OODS lake skills](4-reference_oods.md); adding or dropping a candidate stays a human edit to
+`data/oods.json`.
+
 `refresh.yml` reads and opens its rolling PR with the workflow's own token, then dispatches
 `ci.yml` on the branch, since a PR opened with that token starts no workflow. Private repos are not
 listed.
