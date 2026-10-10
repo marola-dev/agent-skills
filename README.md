@@ -131,6 +131,20 @@ graph an agent queries instead of reading trees. marola adopts it through
 the devkit's `just graph`, never by installing the skill. [How, and where the work
 stands](docs/4-reference_graphify.md).
 
+## OODS lake (MIP-0075)
+
+Skills and agents for the open ocean data lake that
+[MIP-0075](https://docs.marola.dev/6-MIPs/MIP-0075-water-quality-store-r2/) builds on Cloudflare R2:
+Cloudflare's own, DuckDB's, and the data-engineering ones whose rules a marola skill ports. Each
+does one or more of five jobs, INIT, MANAGE, GOV, DEBUG and CONNECT. The daily refresh counts
+how many have been adopted in the repos MIP-0075 lands in:
+
+<!-- oods:start -->
+**0 of 13 adopted** in MIP-0075's repos. By job: INIT 0/2 · MANAGE 0/6 · GOV 0/5 · DEBUG 0/6 · CONNECT 0/3.
+<!-- oods:end -->
+
+[Every skill, its upstream, how it comes in and what to watch for](docs/4-reference_oods.md).
+
 ## Top 20 skill repositories
 
 Picked for the work here (FE, backend, DE and research, as in the [catalogue](docs/4-reference.md#tags)),
@@ -194,6 +208,8 @@ Highest first; each one has its evidence, a proposed fix and the issue tracking 
 - [Needs review](docs/4-reference_review.md): the flagged ones, each with the evidence and a
   proposed fix.
 - [Graphify](docs/4-reference_graphify.md): how marola adopts it, the rules and the open tasks.
+- [OODS lake skills](docs/4-reference_oods.md): what helps build and run MIP-0075's lake, and how
+  much of it is adopted.
 - [Development](docs/3-development.md): how each status was established, with the commands to
   reproduce it, and how to refresh the catalogue.
 

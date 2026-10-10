@@ -367,6 +367,67 @@ def render_curated(curated, history, today):
     return "\n".join(out)
 
 
+JOBS = ("INIT", "MANAGE", "GOV", "DEBUG", "CONNECT")
+
+
+def oods_adoption(oods, index):
+    """Each data/oods.json skill's adopting skill key in a MIP repo, from its lock row or name."""
+    mine = [s for s in index["skills"].values() if s["repo"] in oods["repos"]]
+
+    def carries(s, e):
+        lock = s.get("lock") or {}
+        vendored = e["upstream"] and (lock.get("upstream"), lock.get("path")) == (
+            e["upstream"],
+            e["path"],
+        )
+        return vendored or (e["adopt_as"] and s["name"] == e["adopt_as"])
+
+    found = {}
+    for e in oods["skills"]:
+        hits = [s for s in mine if carries(s, e)]
+        found[e["name"]] = f"{hits[0]['repo']}:{hits[0]['path']}" if hits else ""
+    return found
+
+
+def render_oods(oods, index):
+    """The README's summary block and the reference page's table, both from data/oods.json."""
+    found = oods_adoption(oods, index)
+    done = [e for e in oods["skills"] if found[e["name"]]]
+    per_job = " · ".join(
+        f"{j} {sum(1 for e in done if j in e['jobs'])}/"
+        f"{sum(1 for e in oods['skills'] if j in e['jobs'])}"
+        for j in JOBS
+    )
+    summary = (
+        f"**{len(done)} of {len(oods['skills'])} adopted** in {oods['mip']}'s repos. "
+        f"By job: {per_job}."
+    )
+
+    def where(key):
+        repo, path = key.split(":", 1)
+        return f"adopted: [{repo.split('/')[1]}](https://github.com/{repo}/blob/HEAD/{path})"
+
+    out = [
+        summary,
+        "",
+        "| Skill | Jobs | Upstream | Comes in | Status | Why | Caveat |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for e in oods["skills"]:
+        up = (
+            f"[{e['upstream']}](https://github.com/{e['upstream']}/tree/{e['commit']}/{e['path']})"
+            f" ({e['license']})"
+            if e["upstream"]
+            else "in-house"
+        )
+        status = where(found[e["name"]]) if found[e["name"]] else "not yet"
+        out.append(
+            f"| `{e['name']}` | {', '.join(e['jobs'])} | {up} | {e['into']} | {status} "
+            f"| {e['why']} | {e['caveat']} |"
+        )
+    return summary, "\n".join(out)
+
+
 def splice(text, block, name):
     start, end = f"<!-- {name}:start -->", f"<!-- {name}:end -->"
     head, rest = text.split(start, 1)
@@ -414,6 +475,13 @@ def main(argv=None):
         readme = ROOT / "README.md"
         block = render_curated(curated, history, today)
         readme.write_text(splice(readme.read_text(), block, "top-repos"))
+    oods = load(data / "oods.json", None)
+    if oods:
+        summary, table = render_oods(oods, index)
+        readme = ROOT / "README.md"
+        readme.write_text(splice(readme.read_text(), summary, "oods"))
+        page = ROOT / "docs/4-reference_oods.md"
+        page.write_text(splice(page.read_text(), table, "oods"))
     total = len(index["skills"])
     print(f"{total} skills and agents, {queue} waiting for review, {gh.calls} API calls")
     return 0
@@ -614,6 +682,32 @@ def self_test():
     cur = [{"repo": "a/b", "tag": "FE", "why": "x"}, {"repo": "c/d", "tag": "DE", "why": "y"}]
     table = render_curated(cur, hist, "2026-10-07")
     assert table.index("a/b") < table.index("c/d") and "+0 since 2026-10-06" in table, table
+    oods = {
+        "mip": "MIP-0075",
+        "repos": ["me/a"],
+        "skills": [
+            {"name": "ponytail", "upstream": "up/y", "path": "skills/ponytail", "adopt_as": ""},
+            {"name": "plain", "upstream": "up/x", "path": "skills/plain", "adopt_as": ""},
+            {"name": "ported", "upstream": "up/z", "path": "skills/p", "adopt_as": "edited"},
+            {"name": "own", "upstream": "", "path": "", "adopt_as": "missing"},
+        ],
+    }
+    for i, e in enumerate(oods["skills"]):
+        e.update(commit="c", license="MIT", jobs=["INIT", "DEBUG"][: i % 2 + 1], into="x")
+        e.update(why="w", caveat="c")
+    # A lock row adopts (ponytail); a same-named copy without one does not (plain).
+    found = oods_adoption(oods, again)
+    assert found == {
+        "ponytail": "me/a:.claude/skills/ponytail/SKILL.md",
+        "plain": "",
+        "ported": "me/a:.claude/skills/edited/SKILL.md",
+        "own": "",
+    }, found
+    summary, table = render_oods(oods, again)
+    assert summary.startswith("**2 of 4 adopted** in MIP-0075's repos."), summary
+    assert "INIT 2/4 · MANAGE 0/0 · GOV 0/0 · DEBUG 0/2" in summary, summary
+    assert "| `own` | INIT, DEBUG | in-house | x | not yet |" in table, table
+    assert "adopted: [a](https://github.com/me/a/blob/HEAD/.claude/skills/ponytail" in table
     doc = splice("a\n<!-- t:start -->\nold\n<!-- t:end -->\nb", "new", "t")
     assert doc == "a\n<!-- t:start -->\nnew\n<!-- t:end -->\nb", doc
     print("refresh.py self-test: ok")
