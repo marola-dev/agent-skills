@@ -38,7 +38,7 @@ jobs:
           git switch -C "$BRANCH"
           git add data docs README.md
           git commit -qm "chore: refresh the skills index" \
-            -m "Tested: scripts/refresh.py" -m "Cost: n/a (automation)" \
+            -m "Tested: scripts/refresh.py" \
             -m "Co-Authored-By: Claude <noreply@anthropic.com>"
           git push --force origin "$BRANCH"
           body="$(sed -n '/^## Waiting for review/,/^## Own/p' docs/4-reference_index.md | sed '$d')"

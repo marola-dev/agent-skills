@@ -20,7 +20,6 @@
       "Bash(just uprd:*)",
       "Bash(just quality*)",
       "Bash(uprd:*)",
-      "Bash(cost-split:*)",
       "Bash(python3 scripts/refresh.py --self-test*)",
       "Bash(git status*)",
       "Bash(git diff*)",

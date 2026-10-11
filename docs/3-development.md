@@ -24,8 +24,7 @@ The two that pass: marola-corpus 4d55a45 (`corpus-doc`, 10/14 trigger queries) a
 `obsidian-vault` commit of marola-dev/marola#410 (eval 2, 4/4 against a failing baseline). An
 `evals/` folder that only "parses" does not count.
 
-Running a set: skill-creator's runner, as `corpus-doc` did. It calls a model, so the run's cost
-goes in the commit's `Cost:`.
+Running a set: skill-creator's runner, as `corpus-doc` did. It calls a model.
 
 ```bash
 python3 <skill-creator>/scripts/run_eval.py --skill-path <skill dir> --runs-per-query 3
